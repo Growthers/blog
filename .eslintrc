@@ -11,7 +11,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:next/recommended",
+    "plugin:@next/next/recommended",
     "next/core-web-vitals",
     "prettier"
   ],
@@ -30,7 +30,6 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "sort-imports": "error",
     "next/no-img-element": "off"
   }
 }
