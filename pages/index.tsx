@@ -30,6 +30,11 @@ const Home: NextPage<Props> = (props) => {
                     {post.author + "の" + post.slug}
                   </Link>
                 </li>
+                <li>
+                  <Link href={`/authors/${post.author}`}>
+                    {post.author + "のページ"}
+                  </Link>
+                </li>
               </ul>
             </li>
           ))}
