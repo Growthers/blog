@@ -17,6 +17,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Audit
         run: yarn audit
