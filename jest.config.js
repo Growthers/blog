@@ -2,12 +2,12 @@
  * @type {import("@jest/types").Config.InitialOptions}
  */
 const config = {
-  roots: ['<rootDir>'],
+  roots: ["<rootDir>"],
 
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   transformIgnorePatterns: ["/node_modules/", "^.+\\.module\\.(css|sass|scss)$"],
 
-  moduleFileExtensions: ['ts', 'tsx', 'js','jsx'],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
 
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
