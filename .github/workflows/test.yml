@@ -27,9 +27,5 @@ jobs:
       - name: Lint
         run: yarn lint --max-warnings=0
 
-      # 以下は説明のために付け足し
       - name: Build
         run: yarn run build
-
-      - name: Audit
-        run: yarn audit

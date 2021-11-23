@@ -1,0 +1,22 @@
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+env:
+  HUSKY: 0
+
+jobs:
+  test:
+    name: Audit
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Audit
+        run: yarn audit
