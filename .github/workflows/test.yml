@@ -33,3 +33,6 @@ jobs:
 
       - name: Audit
         run: yarn audit
+
+      - name: Jest
+        run: yarn test
