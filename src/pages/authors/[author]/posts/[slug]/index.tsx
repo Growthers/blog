@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import MarkdownIt from "markdown-it";
+import ReactMarkdown from 'react-markdown'
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "../../../../../utils/api";
 
@@ -36,12 +36,11 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
 });
 
 const index: NextPage<AfterProps> = (props) => {
-  const md = new MarkdownIt();
   return (
     <div>
       <h2>{props.title}</h2>
       <div>Author: {props.author}</div>
-      <div dangerouslySetInnerHTML={{ __html: md.render(props.content) }} />
+      <ReactMarkdown children={props.content}></ReactMarkdown>
     </div>
   );
 };
