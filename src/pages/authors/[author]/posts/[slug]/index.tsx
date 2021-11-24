@@ -40,7 +40,7 @@ const index: NextPage<AfterProps> = (props) => {
     <div>
       <h2>{props.title}</h2>
       <div>Author: {props.author}</div>
-      <ReactMarkdown children={props.content}></ReactMarkdown>
+      <ReactMarkdown>{props.content}</ReactMarkdown>
     </div>
   );
 };
