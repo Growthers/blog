@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from "react-markdown";
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "../../../../../utils/api";
 
@@ -35,14 +35,12 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
   props: getPost(params?.author, params?.slug),
 });
 
-const index: NextPage<AfterProps> = (props) => {
-  return (
-    <div>
-      <h2>{props.title}</h2>
-      <div>Author: {props.author}</div>
-      <ReactMarkdown>{props.content}</ReactMarkdown>
-    </div>
-  );
-};
+const index: NextPage<AfterProps> = (props) => (
+  <div>
+    <h2>{props.title}</h2>
+    <div>Author: {props.author}</div>
+    <ReactMarkdown>{props.content}</ReactMarkdown>
+  </div>
+);
 
 export default index;
