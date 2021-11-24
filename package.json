@@ -14,7 +14,11 @@
     "test": "jest"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --fix"
+    "*.{ts,tsx}": [
+      "yarn lint:fix",
+      "yarn format",
+      "git add ."
+    ]
   },
   "dependencies": {
     "@types/glob": "^7.2.0",
