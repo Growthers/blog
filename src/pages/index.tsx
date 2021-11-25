@@ -13,14 +13,14 @@ export const getStaticProps = () => {
   }
 }
 
-const Home: NextPage<Props> = (props) => (
+const Home: NextPage<Props> = ({posts}) => (
   <div>
     <div>
       記事一覧
     </div>
     <div>
       <ul>
-        {props.posts.map((post) => (
+        {posts.map((post) => (
           <li key={post.title}>
             {post.title}
             <ul>
