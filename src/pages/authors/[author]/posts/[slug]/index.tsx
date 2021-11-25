@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
   props: getPost(params?.author, params?.slug),
 });
 
-const linkBlock = (href): string => {
+const linkBlock = (href, _children, _title): string => {
   if (href.match('http')) {
     return "_blank"
   }
