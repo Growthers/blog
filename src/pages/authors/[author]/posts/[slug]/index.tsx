@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import ReactMarkdown from "react-markdown";
+import remarkGFM from "remark-gfm";
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "../../../../../utils/api";
 
@@ -39,7 +40,7 @@ const index: NextPage<AfterProps> = (props) => (
   <div>
     <h2>{props.title}</h2>
     <div>Author: {props.author}</div>
-    <ReactMarkdown>{props.content}</ReactMarkdown>
+    <ReactMarkdown remarkPlugins={[remarkGFM]}>{props.content}</ReactMarkdown>
   </div>
 );
 
