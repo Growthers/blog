@@ -26,12 +26,12 @@ const Home: NextPage<Props> = ({posts}) => (
             <ul>
               <li>
                 <Link href={`/authors/${post.author}/posts/${post.slug}`}>
-                  {post.author + "の" + post.slug}
+                  {`${post.author}の${post.slug}`}
                 </Link>
               </li>
               <li>
                 <Link href={`/authors/${post.author}`}>
-                  {post.author + "のページ"}
+                  {`${post.author}のページ`}
                 </Link>
               </li>
             </ul>
