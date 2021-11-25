@@ -36,11 +36,22 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
   props: getPost(params?.author, params?.slug),
 });
 
+const linkBlock = (href, children, title): string => {
+  if (href.match('http')) {
+    return "_blank"
+  }
+  return ""
+};
+
 const index: NextPage<AfterProps> = (props) => (
   <div>
     <h2>{props.title}</h2>
     <div>Author: {props.author}</div>
-    <ReactMarkdown remarkPlugins={[remarkGFM]}>{props.content}</ReactMarkdown>
+    <ReactMarkdown
+      remarkPlugins={[remarkGFM]}
+      linkTarget={linkBlock}>
+      {props.content}
+    </ReactMarkdown>
   </div>
 );
 
