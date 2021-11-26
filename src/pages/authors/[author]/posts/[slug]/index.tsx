@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import ReactMarkdown from "react-markdown";
+import remarkGFM from "remark-gfm";
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "../../../../../utils/api";
 
@@ -35,11 +36,22 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
   props: getPost(params?.author, params?.slug),
 });
 
+const linkBlock = (href, _children, _title): string => {
+  if (href.match('http')) {
+    return "_blank"
+  }
+  return ""
+};
+
 const index: NextPage<AfterProps> = (props) => (
   <div>
     <h2>{props.title}</h2>
     <div>Author: {props.author}</div>
-    <ReactMarkdown>{props.content}</ReactMarkdown>
+    <ReactMarkdown
+      remarkPlugins={[remarkGFM]}
+      linkTarget={linkBlock}>
+      {props.content}
+    </ReactMarkdown>
   </div>
 );
 
