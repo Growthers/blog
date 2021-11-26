@@ -21,9 +21,9 @@ export const getPost = (author?: string, slug?: string) => {
 
   const info: ArticleInfo = {
     title: data.title,
-    author: author,
-    slug: slug,
-    content: content,
+    author,
+    slug,
+    content,
   };
 
   return info;
