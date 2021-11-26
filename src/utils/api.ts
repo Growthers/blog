@@ -12,22 +12,18 @@ type ArticleInfo = {
   content: string;
 };
 
-const getPostMeta = (fileContents: string) => {
-  const { data } = matter(fileContents);
-  return data.title;
-};
-
 export const getPost = (author?: string, slug?: string) => {
   if (author === undefined || slug === undefined) return {} as ArticleInfo;
 
   const fullPath = join(postsDirectory, author, slug, "index.md");
   const fileContents = fs.readFileSync(fullPath, "utf-8");
+  const { data, content } = matter(fileContents);
 
   const info: ArticleInfo = {
-    title: getPostMeta(fileContents),
+    title: data.title,
     author,
     slug,
-    content: fileContents,
+    content,
   };
 
   return info;

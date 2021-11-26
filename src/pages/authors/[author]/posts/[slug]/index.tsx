@@ -37,8 +37,8 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
 
 const index: NextPage<AfterProps> = (props) => (
   <div>
-    <h2>{props.title}</h2>
-    <div>Author: {props.author}</div>
+    <div>タイトル：{props.title}</div>
+    <div>作者: {props.author}</div>
     <ReactMarkdown>{props.content}</ReactMarkdown>
   </div>
 );
