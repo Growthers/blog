@@ -60,8 +60,8 @@ const linkBlock = (
 
 const index: NextPage<AfterProps> = (props) => (
   <div>
-    <h2>{props.title}</h2>
-    <div>Author: {props.author}</div>
+    <div>タイトル：{props.title}</div>
+    <div>作者: {props.author}</div>
     <ReactMarkdown
       remarkPlugins={[remarkGFM]}
       rehypePlugins={[rehypeRaw]}
