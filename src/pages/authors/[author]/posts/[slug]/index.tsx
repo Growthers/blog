@@ -1,6 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "../../../../../utils/api";
 
@@ -62,6 +64,7 @@ const index: NextPage<AfterProps> = (props) => (
     <div>Author: {props.author}</div>
     <ReactMarkdown
       remarkPlugins={[remarkGFM]}
+      rehypePlugins={[rehypeRaw]}
       components={{
         a: linkBlock,
       }}
