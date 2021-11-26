@@ -36,11 +36,24 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
   props: getPost(params?.author, params?.slug),
 });
 
-const linkBlock = (href, _children, _title): string => {
-  if (href.match('http')) {
-    return "_blank"
+const linkBlock = (
+  props: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
+): JSX.Element => {
+  const { href, children } = props;
+
+  if (href === undefined) {
+    return <a href={href}>{children}</a>;
   }
-  return ""
+
+  if (href.match("http")) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  }
+
+  return <a href={href}>{children}</a>;
 };
 
 const index: NextPage<AfterProps> = (props) => (
@@ -49,7 +62,10 @@ const index: NextPage<AfterProps> = (props) => (
     <div>Author: {props.author}</div>
     <ReactMarkdown
       remarkPlugins={[remarkGFM]}
-      linkTarget={linkBlock}>
+      components={{
+        a: linkBlock,
+      }}
+    >
       {props.content}
     </ReactMarkdown>
   </div>
