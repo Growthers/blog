@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import ReactMarkdown from "react-markdown";
 import { ParsedUrlQuery } from "node:querystring";
-import { getPosts, getPost } from "../../../../../utils/api";
+import { getPosts, getPost } from "utils/api";
 
 type BeforeProps = {
   title: string;
