@@ -11,6 +11,7 @@ type BeforeProps = {
   author: string;
   slug: string;
   content: string;
+  lastupdate: string;
 };
 
 type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
@@ -62,6 +63,7 @@ const index: NextPage<AfterProps> = (props) => (
   <div>
     <div>タイトル：{props.title}</div>
     <div>作者: {props.author}</div>
+    <div>最終更新: {new Date(props.lastupdate).toString()}</div>
     <ReactMarkdown
       remarkPlugins={[remarkGFM]}
       rehypePlugins={[rehypeRaw]}
