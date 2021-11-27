@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import { ParsedUrlQuery } from "node:querystring";
-import { getPosts } from "../../../utils/api";
+import { getPosts } from "../../utils/api";
 
 type BeforeProps = {
   author?: string;
