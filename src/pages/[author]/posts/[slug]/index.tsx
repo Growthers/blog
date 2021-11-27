@@ -1,5 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import ReactMarkdown from "react-markdown";
+import remarkGFM from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "utils/api";
 
@@ -35,11 +38,39 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) 
   props: getPost(params?.author, params?.slug),
 });
 
+const linkBlock = (
+  props: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
+): JSX.Element => {
+  const { href, children } = props;
+
+  if (href === undefined) {
+    return <a href={href}>{children}</a>;
+  }
+
+  if (href.match("http")) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  }
+
+  return <a href={href}>{children}</a>;
+};
+
 const index: NextPage<AfterProps> = (props) => (
   <div>
-    <h2>{props.title}</h2>
-    <div>Author: {props.author}</div>
-    <ReactMarkdown>{props.content}</ReactMarkdown>
+    <div>タイトル：{props.title}</div>
+    <div>作者: {props.author}</div>
+    <ReactMarkdown
+      remarkPlugins={[remarkGFM]}
+      rehypePlugins={[rehypeRaw]}
+      components={{
+        a: linkBlock,
+      }}
+    >
+      {props.content}
+    </ReactMarkdown>
   </div>
 );
 
