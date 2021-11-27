@@ -19,6 +19,9 @@
       "yarn format"
     ]
   },
+  "engines": {
+    "npm": "please_use_yarn_instead"
+  },
   "dependencies": {
     "@types/glob": "^7.2.0",
     "glob": "^7.2.0",
