@@ -23,10 +23,10 @@ const Home: NextPage<Props> = ({ posts }) => (
             {post.title}
             <ul>
               <li>
-                <Link href={`/authors/${post.author}/posts/${post.slug}`}>{`${post.author}の${post.slug}`}</Link>
+                <Link href={`/${post.author}/posts/${post.slug}`}>{`${post.author}の${post.slug}`}</Link>
               </li>
               <li>
-                <Link href={`/authors/${post.author}`}>{`${post.author}のページ`}</Link>
+                <Link href={`/${post.author}`}>{`${post.author}のページ`}</Link>
               </li>
             </ul>
           </li>

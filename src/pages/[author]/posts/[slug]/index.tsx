@@ -5,9 +5,15 @@ import rehypeRaw from "rehype-raw";
 import * as ogp from "ogp-parser";
 
 import { ParsedUrlQuery } from "node:querystring";
-import { getPosts, getPost, ArticleInfo } from "utils/api";
+import { getPosts, getPost } from "utils/api";
 
-type BeforeProps = ArticleInfo;
+type BeforeProps = {
+  author: string;
+  lastupdate: string;
+  title: string;
+  slug: string;
+  content: string;
+};
 
 type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -30,9 +36,46 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) => ({
-  props: getPost(params?.author, params?.slug),
-});
+const GetOgp = async (url: string) => ogp.default(url);
+
+export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
+  const data = getPost(params?.author, params?.slug);
+
+  const httpURL = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
+  const mdURL = /\[.*]\((https?|ftp)(:\/\/[-_.!~*\\'()a-zA-Z0-9;/?:@&=+$,%#]+)\)/gim;
+
+  const mdLinks = data.content.match(mdURL);
+
+  let mdOGPs;
+  let result = data.content;
+
+  if (mdLinks !== null) {
+    mdOGPs = await Promise.all(
+      mdLinks.map(async (item) => {
+        const url = item.match(httpURL);
+
+        if (url !== null) {
+          return GetOgp(url[0]);
+        }
+
+        throw new Error();
+      }),
+    );
+
+    mdOGPs.forEach((val, index) => {
+      result = result.replace(
+        mdLinks[index],
+        `<a href="${mdLinks[index].match(httpURL)}"><img src="${val.ogp["og:image"][0]}"  alt=""/></a>`,
+      );
+    });
+  }
+
+  data.content = result;
+
+  return {
+    props: data,
+  };
+};
 
 const linkBlock = (
   props: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
@@ -52,12 +95,6 @@ const linkBlock = (
   }
 
   return <a href={href}>{children}</a>;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const GetOgp = async (url: string) => {
-  const res = await ogp.default(url);
-  return res;
 };
 
 const index: NextPage<AfterProps> = (props) => (

@@ -7,10 +7,12 @@ date: 2021-11-21
 
 ## Autolink literals
 
-www.example.com, https://example.com, and contact@example.com.
+www.twitch.tv/, 
+https://www.twitch.tv/, and contact@example.com.
 
-[test link](/)
+[test link](https://www.twitch.tv/)
 
+[test link](https://www.youtube.com/watch?v=OXOfQgvQDJw&ab_channel=ZeroIjuinCh.%E4%BC%8A%E9%9B%86%E9%99%A2%E3%82%BC%E3%83%AD)
 ## Footnote
 
 A note[^1]
