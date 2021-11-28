@@ -1,6 +1,6 @@
 import { InferGetStaticPropsType, NextPage } from "next";
 import Link from "next/link";
-import { getPosts } from "../utils/api";
+import { getPosts } from "utils/api";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 

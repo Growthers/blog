@@ -4,7 +4,7 @@ import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 
 import { ParsedUrlQuery } from "node:querystring";
-import { getPosts, getPost } from "../../../../utils/api";
+import { getPosts, getPost } from "utils/api";
 
 type BeforeProps = {
   title: string;
