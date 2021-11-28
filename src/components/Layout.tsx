@@ -1,6 +1,9 @@
 import type { FC, ReactNode } from "react";
 import Head from "next/head";
 
+import Header from "./Header";
+import Footer from "./Footer";
+
 const DefaultDescription = "Blog - 共同開発鯖";
 
 interface Information {
@@ -59,8 +62,12 @@ const Layout: FC<Props> = ({ PageTitle, children, PageDescription = DefaultDescr
       <OgpMetas PageTitle={PageTitle} PageDescription={PageDescription} />
       <TwitterMetas PageTitle={PageTitle} PageDescription={PageDescription} />
     </Head>
-    <main>
-      <div>{children}</div>
+    <main className="w-full">
+      <div className="min-h-screen w-full">
+        <Header />
+        {children}
+      </div>
+      <Footer />
     </main>
   </>
 );

@@ -1,4 +1,6 @@
-import "styles/globals.css";
+import "tailwindcss/tailwind.css";
+import "styles/global.scss";
+import "github-markdown-css/github-markdown-light.css";
 import type { AppProps } from "next/app";
 
 const MyApp = ({ Component, pageProps, router }: AppProps): JSX.Element => (
