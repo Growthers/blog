@@ -5,15 +5,9 @@ import rehypeRaw from "rehype-raw";
 import * as ogp from "ogp-parser";
 
 import { ParsedUrlQuery } from "node:querystring";
-import { getPosts, getPost } from "utils/api";
+import { getPosts, getPost, ArticleInfo } from "utils/api";
 
-type BeforeProps = {
-  author: string;
-  lastupdate: string;
-  title: string;
-  slug: string;
-  content: string;
-};
+type BeforeProps = ArticleInfo;
 
 type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
 
