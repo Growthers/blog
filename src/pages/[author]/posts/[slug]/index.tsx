@@ -5,15 +5,9 @@ import rehypeRaw from "rehype-raw";
 import * as ogp from "ogp-parser";
 
 import { ParsedUrlQuery } from "node:querystring";
-import { getPosts, getPost } from "utils/api";
+import { getPosts, getPost, ArticleInfo } from "utils/api";
 
-type BeforeProps = {
-  title: string;
-  author: string;
-  slug: string;
-  content: string;
-  lastupdate: string;
-};
+type BeforeProps = ArticleInfo;
 
 type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -69,8 +63,16 @@ const GetOgp = async (url: string) => {
 const index: NextPage<AfterProps> = (props) => (
   <div>
     <div>タイトル：{props.title}</div>
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src={props.icon} alt={props.author} />
     <div>作者: {props.author}</div>
+    <div>Bio: {props.bio}</div>
+    <div>作成: {new Date(props.date).toString()}</div>
     <div>最終更新: {new Date(props.lastupdate).toString()}</div>
+    <div>サイト: {props.site}</div>
+    <div>GitHub: {props.github}</div>
+    <div>Twitter: {props.twitter}</div>
+    <div>Roles: {props.roles.toString()}</div>
     <ReactMarkdown
       remarkPlugins={[remarkGFM]}
       rehypePlugins={[rehypeRaw]}
