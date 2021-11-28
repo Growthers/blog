@@ -4,7 +4,9 @@ import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 
 import { ParsedUrlQuery } from "node:querystring";
+
 import { getPosts, getPost, ArticleInfo } from "utils/api";
+import Layout from "../../../../components/Layout";
 
 type BeforeProps = ArticleInfo;
 
@@ -54,7 +56,7 @@ const linkBlock = (
 };
 
 const index: NextPage<AfterProps> = (props) => (
-  <div>
+  <Layout PageTitle={props.title}>
     <div>タイトル：{props.title}</div>
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={props.icon} alt={props.author} />
@@ -72,10 +74,11 @@ const index: NextPage<AfterProps> = (props) => (
       components={{
         a: linkBlock,
       }}
+      className="markdown-body"
     >
       {props.content}
     </ReactMarkdown>
-  </div>
+  </Layout>
 );
 
 export default index;

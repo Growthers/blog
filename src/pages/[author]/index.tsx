@@ -1,6 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import { ParsedUrlQuery } from "node:querystring";
+
 import { getPosts } from "utils/api";
+import Layout from "../../components/Layout";
 
 type BeforeProps = {
   author?: string;
@@ -34,9 +36,9 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
 });
 
 const index: NextPage<AfterProps> = (props) => (
-  <div>
+  <Layout PageTitle={`${props.author} - Blog`}>
     <h2>{props.author}のページ</h2>
-  </div>
+  </Layout>
 );
 
 export default index;
