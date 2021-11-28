@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } fro
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import * as ogp from "ogp-parser";
 
 import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost } from "../../../../utils/api";
@@ -56,6 +57,12 @@ const linkBlock = (
   }
 
   return <a href={href}>{children}</a>;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const GetOgp = async (url: string) => {
+  const res = await ogp.default(url);
+  return res;
 };
 
 const index: NextPage<AfterProps> = (props) => (
