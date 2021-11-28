@@ -19,8 +19,12 @@
       "yarn format"
     ]
   },
+  "engines": {
+    "npm": "please_use_yarn_instead"
+  },
   "dependencies": {
     "@types/glob": "^7.2.0",
+    "gitlog": "^4.0.4",
     "glob": "^7.2.0",
     "gray-matter": "^4.0.3",
     "next": "12.0.4",
