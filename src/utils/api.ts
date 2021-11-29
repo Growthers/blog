@@ -4,11 +4,12 @@ import { join } from "path";
 import matter from "gray-matter";
 import gitlog from "gitlog";
 
+const dataPath = "data";
 const articlesPath = "articles";
-const postsDirectory = join(process.cwd(), articlesPath);
+const postsDirectory = join(process.cwd(), dataPath, articlesPath);
 
 const gitoptions = (filepath: string) => ({
-  repo: process.cwd(),
+  repo: join(process.cwd(), dataPath),
   file: filepath,
   fields: ["authorDate"] as const,
 });
