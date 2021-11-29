@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } fro
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import * as ogp from "ogp-parser";
 
 import { ParsedUrlQuery } from "node:querystring";
 
@@ -31,9 +32,46 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<BeforeProps, Params> = ({ params }) => ({
-  props: getPost(params?.author, params?.slug),
-});
+const GetOgp = async (url: string) => ogp.default(url);
+
+export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
+  const data = getPost(params?.author, params?.slug);
+
+  const httpURL = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
+  const mdURL = /\[.*]\((https?|ftp)(:\/\/[-_.!~*\\'()a-zA-Z0-9;/?:@&=+$,%#]+)\)/gim;
+
+  const mdLinks = data.content.match(mdURL);
+
+  let mdOGPs;
+  let result = data.content;
+
+  if (mdLinks !== null) {
+    mdOGPs = await Promise.all(
+      mdLinks.map(async (item) => {
+        const url = item.match(httpURL);
+
+        if (url !== null) {
+          return GetOgp(url[0]);
+        }
+
+        throw new Error();
+      }),
+    );
+
+    mdOGPs.forEach((val, index) => {
+      result = result.replace(
+        mdLinks[index],
+        `<a href="${mdLinks[index].match(httpURL)}"><img src="${val.ogp["og:image"][0]}"  alt=""/></a>`,
+      );
+    });
+  }
+
+  data.content = result;
+
+  return {
+    props: data,
+  };
+};
 
 const linkBlock = (
   props: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
