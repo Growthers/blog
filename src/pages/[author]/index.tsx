@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } fro
 import { ParsedUrlQuery } from "node:querystring";
 
 import { getPosts } from "utils/api";
-import Layout from "../../components/Layout";
+import Layout from "components/Layout";
 
 type BeforeProps = {
   author?: string;

@@ -40,13 +40,12 @@ export const getPost = (author?: string, slug?: string) => {
   const profile = JSON.parse(fs.readFileSync(join(postsDirectory, author, "profile.json"), "utf-8"));
 
   const commits = gitlog(gitoptions(join(articlesPath, author, slug)));
-
   const title = data.title ? data.title : "";
   const authorName = profile.name ? profile.name : author;
   const icon = profile.icon ? profile.icon : "";
   const bio = profile.bio ? profile.bio : "";
   const date = data.date ? data.date.toString() : "";
-  const lastupdate = commits[0].authorDate ? commits[0].authorDate : "";
+  const lastupdate = commits.length !== 0 ? commits[0].authorDate : "";
   const site = profile.site ? profile.site : "";
   const github = profile.github ? profile.github : "";
   const twitter = profile.twitter ? profile.twitter : "";
