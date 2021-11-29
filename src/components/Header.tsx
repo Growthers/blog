@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import logo from "public/growthers.png";
+import logo from "../../public/growthers.png";
 
 const Header: FC = () => (
   <div className="bg-white p-4 px-20 flex items-center">
