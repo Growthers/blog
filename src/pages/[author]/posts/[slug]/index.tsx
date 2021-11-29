@@ -8,6 +8,7 @@ import { ParsedUrlQuery } from "node:querystring";
 
 import { getPosts, getPost, ArticleInfo } from "utils/api";
 import Layout from "../../../../components/Layout";
+import Author from "../../../../components/Author";
 
 type BeforeProps = ArticleInfo;
 
@@ -96,16 +97,9 @@ const linkBlock = (
 const index: NextPage<AfterProps> = (props) => (
   <Layout PageTitle={props.title}>
     <div>タイトル：{props.title}</div>
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img src={props.icon} alt={props.author} />
-    <div>作者: {props.author}</div>
-    <div>Bio: {props.bio}</div>
+    <div>作者: {props.authorName}</div>
     <div>作成: {new Date(props.date).toString()}</div>
     <div>最終更新: {new Date(props.lastupdate).toString()}</div>
-    <div>サイト: {props.site}</div>
-    <div>GitHub: {props.github}</div>
-    <div>Twitter: {props.twitter}</div>
-    <div>Roles: {props.roles.toString()}</div>
     <ReactMarkdown
       remarkPlugins={[remarkGFM]}
       rehypePlugins={[rehypeRaw]}
@@ -116,6 +110,15 @@ const index: NextPage<AfterProps> = (props) => (
     >
       {props.content}
     </ReactMarkdown>
+    <Author
+      AuthorName={props.authorName}
+      IconURL={props.icon}
+      Bio={props.bio}
+      SiteURL={props.site}
+      GitHubID={props.github}
+      TwitterID={props.twitter}
+      Roles={props.roles}
+    />
   </Layout>
 );
 
