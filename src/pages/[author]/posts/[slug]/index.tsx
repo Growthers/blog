@@ -60,9 +60,25 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
     );
 
     mdOGPs.forEach((val, index) => {
+      const url = mdLinks[index].match(httpURL);
+      const { title } = val;
+      const description = "og:description" in val.ogp ? val.ogp["og:description"][0] : "";
+      const image = "og:image" in val.ogp ? val.ogp["og:image"][0] : "";
+      const isImage = image !== "" ? "block" : "none";
       result = result.replace(
         mdLinks[index],
-        `<a href="${mdLinks[index].match(httpURL)}"><img src="${val.ogp["og:image"][0]}"  alt=""/></a>`,
+        `<a href="${url}">
+          <div class="w-full my-3 flex border-solid border-2">
+            <div class="w-5/6 p-2">
+              <p class="w-full text-lg font-medium text-black truncate">${title}</p>
+              <p class="w-full font-light text-black truncate">${description}</p>
+              <p class="w-full text-sm font-light text-black truncate">${url
+                ?.toString()
+                .match(/([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}/g)}</p>
+            </div>
+            <img class="h-full w-1/6 my-auto" style="display: ${isImage}" src="${image}" alt=""/>
+          </div>
+        </a>`,
       );
     });
   }
@@ -94,32 +110,43 @@ const linkBlock = (
   return <a href={href}>{children}</a>;
 };
 
-const index: NextPage<AfterProps> = (props) => (
-  <Layout PageTitle={props.title}>
-    <div>タイトル：{props.title}</div>
-    <div>作者: {props.authorName}</div>
-    <div>作成: {new Date(props.date).toString()}</div>
-    <div>最終更新: {new Date(props.lastupdate).toString()}</div>
-    <ReactMarkdown
-      remarkPlugins={[remarkGFM]}
-      rehypePlugins={[rehypeRaw]}
-      components={{
-        a: linkBlock,
-      }}
-      className="markdown-body"
-    >
-      {props.content}
-    </ReactMarkdown>
-    <Author
-      AuthorName={props.authorName}
-      IconURL={props.icon}
-      Bio={props.bio}
-      SiteURL={props.site}
-      GitHubID={props.github}
-      TwitterID={props.twitter}
-      Roles={props.roles}
-    />
-  </Layout>
-);
+const index: NextPage<AfterProps> = (props) => {
+  const isIconURL = props.icon !== "";
+  return (
+    <Layout PageTitle={props.title}>
+      <div className="m-6">
+        <p className="flex justify-center p-4 text-3xl font-bold">{props.title}</p>
+        <div className="flex justify-center items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
+          <p className="text-lg">{props.authorName}</p>
+        </div>
+      </div>
+      <div className="bg-white m-auto mb-10 p-8 rounded-3xl w-3/4">
+        <ReactMarkdown
+          remarkPlugins={[remarkGFM]}
+          rehypePlugins={[rehypeRaw]}
+          components={{
+            a: linkBlock,
+          }}
+          className="markdown-body pb-8"
+        >
+          {props.content}
+        </ReactMarkdown>
+        <div className="mt-8 p-6 border-dotted border-2">
+          <Author
+            AuthorName={props.authorName}
+            IconURL={props.icon}
+            Bio={props.bio}
+            SiteURL={props.site}
+            GitHubID={props.github}
+            TwitterID={props.twitter}
+            Roles={props.roles}
+          />
+        </div>
+      </div>
+    </Layout>
+  );
+};
 
 export default index;
