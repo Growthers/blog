@@ -7,8 +7,8 @@ import * as ogp from "ogp-parser";
 import { ParsedUrlQuery } from "node:querystring";
 
 import { getPosts, getPost, ArticleInfo } from "utils/api";
-import Layout from "../../../../components/Layout";
-import Author from "../../../../components/Author";
+import Layout from "components/Layout";
+import Author from "components/Author";
 
 type BeforeProps = ArticleInfo;
 
