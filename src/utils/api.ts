@@ -19,6 +19,7 @@ export type ArticleInfo = {
   slug: string;
   content: string;
   author: string;
+  authorName: string;
   icon: string;
   bio: string;
   date: string;
@@ -41,6 +42,7 @@ export const getPost = (author?: string, slug?: string) => {
   const commits = gitlog(gitoptions(join(articlesPath, author, slug)));
 
   const title = data.title ? data.title : "";
+  const authorName = profile.name ? profile.name : author;
   const icon = profile.icon ? profile.icon : "";
   const bio = profile.bio ? profile.bio : "";
   const date = data.date ? data.date.toString() : "";
@@ -54,6 +56,7 @@ export const getPost = (author?: string, slug?: string) => {
     title,
     slug,
     content,
+    authorName,
     author,
     icon,
     bio,
