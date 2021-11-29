@@ -39,37 +39,37 @@ const Author: FC<Props> = (props) => {
         <div className="my-3 break-all">{Bio}</div>
         <div className="flex items-center">
           {isSiteURL && (
-            <div className="mr-4 flex items-center">
-              <div className="pr-1">
-                <FaLink />
-              </div>
+            <div className="mr-4">
               <Link href={SiteURL}>
                 <a target="_blank" rel="noopener noreferrer">
-                  {SiteURL.match(/([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}/g)}
+                  <div className="flex items-center">
+                    <FaLink className="pr-1 text-xl" />
+                    {SiteURL.match(/([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}/g)}
+                  </div>
                 </a>
               </Link>
             </div>
           )}
           {isGitHubID && (
-            <div className="mr-4 flex items-center">
-              <div className="pr-1">
-                <FaGithub />
-              </div>
+            <div className="mr-4">
               <Link href={`https://github.com/${GitHubID}`}>
                 <a target="_blank" rel="noopener noreferrer">
-                  {GitHubID}
+                  <div className="flex items-center">
+                    <FaGithub className="pr-1 text-xl" />
+                    {GitHubID}
+                  </div>
                 </a>
               </Link>
             </div>
           )}
           {isTwitterID && (
-            <div className="mr-4 flex items-center">
-              <div className="pr-1">
-                <FaTwitter />
-              </div>
+            <div className="mr-4">
               <Link href={`https://twitter.com/${TwitterID}`}>
                 <a target="_blank" rel="noopener noreferrer">
-                  {TwitterID}
+                  <div className="flex items-center">
+                    <FaTwitter className="pr-1 text-xl" />
+                    {TwitterID}
+                  </div>
                 </a>
               </Link>
             </div>
