@@ -45,8 +45,7 @@ const Author: FC<Props> = (props) => {
               </div>
               <Link href={SiteURL}>
                 <a target="_blank" rel="noopener noreferrer">
-                  {/* eslint-disable-next-line no-useless-escape */}
-                  {SiteURL.match(/([a-zA-Z0-9\-]*\.)+[a-zA-Z]{2,}/g)}
+                  {SiteURL.match(/([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}/g)}
                 </a>
               </Link>
             </div>
