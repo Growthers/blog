@@ -95,7 +95,10 @@ const linkBlock = (
 };
 
 const index: NextPage<AfterProps> = (props) => (
-  <Layout PageTitle={props.title}>
+  <Layout
+    PageTitle={props.title}
+    PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
+  >
     <div>タイトル：{props.title}</div>
     <div>作者: {props.authorName}</div>
     <div>作成: {new Date(props.date).toString()}</div>
