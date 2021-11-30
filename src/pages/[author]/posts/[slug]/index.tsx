@@ -1,11 +1,13 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import * as ogp from "ogp-parser";
 
 import { ParsedUrlQuery } from "node:querystring";
+import { FiCalendar } from "react-icons/fi";
+import { MdUpdate } from "react-icons/md";
 
 import { getPosts, getPost, ArticleInfo } from "utils/api";
 import Layout from "components/Layout";
@@ -51,22 +53,22 @@ const DisplayOgp = (url: string, title: string, description: string, isImage: bo
   if (isImage)
     return `
   <a href="${url}">
-    <div class="w-full my-3 flex border-solid border-2">
-      <div class="w-5/6 p-2">
-        <p class="w-full text-lg font-medium text-black truncate">${title}</p>
-        <p class="w-full font-light text-black truncate">${description}</p>
-        <p class="w-full text-sm font-light text-black truncate">${domain}</p>
+    <div class="w-full my-2 flex border-solid border-2">
+      <div class="w-4/6 sm:w-5/6 p-2">
+        <p class="w-full sm:text-lg font-medium text-black truncate" style="margin: unset">${title}</p>
+        <p class="w-full font-light text-black truncate" style="margin: unset">${description}</p>
+        <p class="w-full text-sm font-light text-black truncate" style="margin: unset">${domain}</p>
       </div>
-      <img class="h-full w-1/6 my-auto" style="display: ${isImage}" src="${image}" alt=""/>
+      <img class="h-full w-2/6 sm:w-1/6 my-auto" style="display: ${isImage}" src="${image}" alt=""/>
     </div>
   </a>`;
 
   return `
   <a href="${url}">
-    <div class="w-full p-2 my-3 border-solid border-2">
-      <p class="w-full text-lg font-medium text-black truncate">${title}</p>
-      <p class="w-full font-light text-black truncate">${description}</p>
-      <p class="w-full text-sm font-light text-black truncate">${domain}</p>
+    <div class="w-full p-2 my-2 border-solid border-2">
+      <p class="w-full sm:text-lg font-medium text-black truncate" style="margin: unset">${title}</p>
+      <p class="w-full font-light text-black truncate" style="margin: unset">${description}</p>
+      <p class="w-full text-sm font-light text-black truncate" style="margin: unset">${domain}</p>
     </div>
   </a>`;
 };
@@ -175,12 +177,16 @@ type DateObjectProps = {
   day: string;
   headcomment: string;
   tailcomment: string;
+  children: ReactNode;
 };
 
-const DateObject: FC<DateObjectProps> = ({ year, month, day, headcomment, tailcomment }) => (
-  <div className="flex justify-center">
-    {headcomment}
-    {year}年{month}月{day}日{tailcomment}
+const DateObject: FC<DateObjectProps> = ({ year, month, day, headcomment, tailcomment, children }) => (
+  <div className="flex justify-center items-center">
+    {children}
+    <div className="ml-1">
+      {headcomment}
+      {year}年{month}月{day}日{tailcomment}
+    </div>
   </div>
 );
 
@@ -194,18 +200,40 @@ const DisplayDate: FC<DisplayDateProps> = ({ create, update }) => {
   if (create === "" && update === "") return <></>;
 
   const { isDate: isCreate, year: Cyear, month: Cmonth, day: Cday, UNIXTime: CunixTime } = DayParam(create);
-  const { isDate: isUpdate, year: Uyear, month: Umonth, day: Uday, UNIXTime: UunixTime } = DayParam(create);
+  const { isDate: isUpdate, year: Uyear, month: Umonth, day: Uday, UNIXTime: UunixTime } = DayParam(update);
 
   if (CunixTime > UunixTime)
-    return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
-  if (!isUpdate) return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
-  if (!isCreate) return <DateObject year={Uyear} month={Umonth} day={Uday} headcomment="" tailcomment="に更新" />;
+    return (
+      <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成">
+        <FiCalendar />
+      </DateObject>
+    );
+  if (!isUpdate)
+    return (
+      <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成">
+        <FiCalendar />
+      </DateObject>
+    );
+  if (!isCreate)
+    return (
+      <DateObject year={Uyear} month={Umonth} day={Uday} headcomment="" tailcomment="に更新">
+        <MdUpdate />
+      </DateObject>
+    );
   if (Cyear === Uyear && Cmonth === Umonth && Cday === Uday)
-    return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
+    return (
+      <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成">
+        <FiCalendar />
+      </DateObject>
+    );
   return (
     <>
-      <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />
-      <DateObject year={Uyear} month={Umonth} day={Uday} headcomment="" tailcomment="に更新" />
+      <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成">
+        <FiCalendar />
+      </DateObject>
+      <DateObject year={Uyear} month={Umonth} day={Uday} headcomment="" tailcomment="に更新">
+        <MdUpdate />
+      </DateObject>
     </>
   );
 };
@@ -218,33 +246,36 @@ const index: NextPage<AfterProps> = (props) => {
       <div className="m-6">
         <p className="flex justify-center p-4 text-3xl font-bold">{props.title}</p>
         <div className="flex justify-center items-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
           <p className="text-lg">{props.authorName}</p>
         </div>
-        <DisplayDate create={props.date} update={props.lastupdate} />
+        <div className="flex flex-col mt-3">
+          <DisplayDate create={props.date} update={props.lastupdate} />
+        </div>
       </div>
-      <div className="bg-white m-auto mb-10 p-8 rounded-3xl w-3/4">
-        <ReactMarkdown
-          remarkPlugins={[remarkGFM]}
-          rehypePlugins={[rehypeRaw]}
-          components={{
-            a: linkBlock,
-          }}
-          className="markdown-body pb-8"
-        >
-          {props.content}
-        </ReactMarkdown>
-        <div className="mt-8 p-6 border-dotted border-2">
-          <Author
-            AuthorName={props.authorName}
-            IconURL={props.icon}
-            Bio={props.bio}
-            SiteURL={props.site}
-            GitHubID={props.github}
-            TwitterID={props.twitter}
-            Roles={props.roles}
-          />
+      <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
+        <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
+          <ReactMarkdown
+            remarkPlugins={[remarkGFM]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              a: linkBlock,
+            }}
+            className="markdown-body pb-8"
+          >
+            {props.content}
+          </ReactMarkdown>
+          <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
+            <Author
+              AuthorName={props.authorName}
+              IconURL={props.icon}
+              Bio={props.bio}
+              SiteURL={props.site}
+              GitHubID={props.github}
+              TwitterID={props.twitter}
+              Roles={props.roles}
+            />
+          </div>
         </div>
       </div>
     </Layout>
