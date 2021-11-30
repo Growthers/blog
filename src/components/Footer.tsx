@@ -1,8 +1,5 @@
 import type { FC } from "react";
-import Image from "next/image";
 import Link from "next/link";
-
-import logo from "../../public/growthers.png";
 
 const Footer: FC = () => (
   <div className="bg-white py-5 px-14">
@@ -10,7 +7,7 @@ const Footer: FC = () => (
       <div>
         <Link href="/">
           <a className="flex justify-center items-center">
-            <Image className="rounded-full h-12 w-12" src={logo} alt="growthers" width={45} height={45} />
+            <img className="rounded-full h-12 w-12" src="/growthers.png" alt="growthers" />
             <p className="mx-2 text-lg">共同開発鯖 - Blog</p>
           </a>
         </Link>

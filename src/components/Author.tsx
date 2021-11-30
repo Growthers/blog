@@ -22,7 +22,6 @@ const Author: FC<Props> = (props) => {
 
   return (
     <div className="bg-white flex items-start w-full">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       {isIconURL && <img className="w-16 h-16 rounded-full" src={IconURL} alt={AuthorName} />}
       {!isIconURL && <FaUserCircle className="w-16 h-16" />}
       <div className="ml-4">

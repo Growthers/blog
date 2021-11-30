@@ -117,7 +117,6 @@ const index: NextPage<AfterProps> = (props) => {
       <div className="m-6">
         <p className="flex justify-center p-4 text-3xl font-bold">{props.title}</p>
         <div className="flex justify-center items-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
           <p className="text-lg">{props.authorName}</p>
         </div>
