@@ -194,7 +194,7 @@ const DisplayDate: FC<DisplayDateProps> = ({ create, update }) => {
   if (create === "" && update === "") return <></>;
 
   const { isDate: isCreate, year: Cyear, month: Cmonth, day: Cday, UNIXTime: CunixTime } = DayParam(create);
-  const { isDate: isUpdate, year: Uyear, month: Umonth, day: Uday, UNIXTime: UunixTime } = DayParam(create);
+  const { isDate: isUpdate, year: Uyear, month: Umonth, day: Uday, UNIXTime: UunixTime } = DayParam(update);
 
   if (CunixTime > UunixTime)
     return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
@@ -210,6 +210,23 @@ const DisplayDate: FC<DisplayDateProps> = ({ create, update }) => {
   );
 };
 
+type YearPassProps = {
+  create: string;
+  update: string;
+};
+const HasPassed: FC<YearPassProps> = ({ create, update }) => {
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (create === "" && update === "") return <></>;
+  const { UNIXTime: UunixTime } = DayParam(update);
+  const nowUNIXTime = Math.floor(new Date().getTime() / 1000);
+  const year = Math.floor((nowUNIXTime - UunixTime) / 31536000);
+
+  if (year) return <div className="flex justify-center">この記事は最終更新から{year}年以上経過しています。</div>;
+
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <></>;
+};
+
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
 
@@ -223,6 +240,7 @@ const index: NextPage<AfterProps> = (props) => {
           <p className="text-lg">{props.authorName}</p>
         </div>
         <DisplayDate create={props.date} update={props.lastupdate} />
+        <HasPassed create={props.date} update={props.lastupdate} />
       </div>
       <div className="bg-white m-auto mb-10 p-8 rounded-3xl w-3/4">
         <ReactMarkdown
