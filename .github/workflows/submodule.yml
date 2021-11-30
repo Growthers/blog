@@ -1,0 +1,36 @@
+on:
+  repository_dispatch:
+    types: [update_data]
+
+jobs:
+  update:
+    name: Submodule Update
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          submodules: true
+
+      - name: Git Config
+        run: |
+          git config --local user.name "growthers"
+          git config --local user.email "noreply@growthers.dev"
+
+      - name: Git Submodule Update
+        run: git submodule update --remote --recursive
+
+      - name: Git Add
+        run: git add --all
+
+      - name: Git Commit
+        run: git commit -m "[Auto] Update Data"
+
+      - name: Git Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
