@@ -11,9 +11,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          ref: main
           persist-credentials: false
           fetch-depth: 0
-          submodules: true
+          submodules: recursive
 
       - name: Git Config
         run: |
