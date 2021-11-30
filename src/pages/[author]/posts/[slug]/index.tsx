@@ -38,20 +38,53 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
 const GetOgp = async (url: string) => ogp.default(url);
 
+const DisplayOgp = (url: string, title: string, description: string, isImage: boolean, image: string) => {
+  if (title === "") return "";
+
+  const domains = url.match(/([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}/g);
+  let domain: string;
+
+  if (domains === null) domain = "";
+  else if (domains.length === 0) domain = "";
+  else domain = domains[0].toString();
+
+  description.replace(/\r?\n/g, "");
+
+  if (isImage)
+    return `
+  <a href="${url}">
+    <div class="w-full my-3 flex border-solid border-2">
+      <div class="w-5/6 p-2">
+        <p class="w-full text-lg font-medium text-black truncate">${title}</p>
+        <p class="w-full font-light text-black truncate">${description}</p>
+        <p class="w-full text-sm font-light text-black truncate">${domain}</p>
+      </div>
+      <img class="h-full w-1/6 my-auto" style="display: ${isImage}" src="${image}" alt=""/>
+    </div>
+  </a>`;
+
+  return `
+  <a href="${url}">
+    <div class="w-full p-2 my-3 border-solid border-2">
+      <p class="w-full text-lg font-medium text-black truncate">${title}</p>
+      <p class="w-full font-light text-black truncate">${description}</p>
+      <p class="w-full text-sm font-light text-black truncate">${domain}</p>
+    </div>
+  </a>`;
+};
+
 export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
   const data = getPost(params?.author, params?.slug);
 
-  const httpURL = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
-  const mdURL = /\[.*]\((https?|ftp)(:\/\/[-_.!~*\\'()a-zA-Z0-9;/?:@&=+$,%#]+)\)/gim;
+  const httpURL = /(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|]/gim;
 
-  const mdLinks = data.content.match(mdURL);
+  const Links = data.content.match(httpURL);
+  let OGPs: ogp.OgpParserResult[];
+  const contents = data.content.split(/\r?\n/);
 
-  let mdOGPs;
-  let result = data.content;
-
-  if (mdLinks !== null) {
-    mdOGPs = await Promise.all(
-      mdLinks.map(async (item) => {
+  if (Links !== null) {
+    OGPs = await Promise.all(
+      Links.map(async (item) => {
         const url = item.match(httpURL);
 
         if (url !== null) {
@@ -62,31 +95,25 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
       }),
     );
 
-    mdOGPs.forEach((val, index) => {
-      const url = mdLinks[index].match(httpURL);
-      const { title } = val;
-      const description = "og:description" in val.ogp ? val.ogp["og:description"][0] : "";
-      const image = "og:image" in val.ogp ? val.ogp["og:image"][0] : "";
-      const isImage = image !== "" ? "block" : "none";
-      result = result.replace(
-        mdLinks[index],
-        `<a href="${url}">
-          <div class="w-full my-3 flex border-solid border-2">
-            <div class="w-5/6 p-2">
-              <p class="w-full text-lg font-medium text-black truncate">${title}</p>
-              <p class="w-full font-light text-black truncate">${description}</p>
-              <p class="w-full text-sm font-light text-black truncate">${url
-                ?.toString()
-                .match(/([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}/g)}</p>
-            </div>
-            <img class="h-full w-1/6 my-auto" style="display: ${isImage}" src="${image}" alt=""/>
-          </div>
-        </a>`,
-      );
+    contents.forEach((content, index) => {
+      const contentLinks = content.match(httpURL);
+      if (contentLinks === null) return;
+
+      contentLinks.forEach((val) => {
+        const ogpIndex = Links.indexOf(val);
+        if (ogpIndex === -1) return;
+
+        const ogpData = OGPs[ogpIndex];
+        const { title } = ogpData;
+        const description = "og:description" in ogpData.ogp ? ogpData.ogp["og:description"][0] : "";
+        const image = "og:image" in ogpData.ogp ? ogpData.ogp["og:image"][0] : "";
+        const isImage = image !== "";
+        contents[index] = `${content}\n${DisplayOgp(val, title, description, isImage, image)}\n`;
+      });
     });
   }
 
-  data.content = result;
+  data.content = contents.join("\n");
 
   return {
     props: data,
