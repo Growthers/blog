@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 
-import Layout from "../components/Layout";
+import Layout from "components/Layout";
 
 const NotFound: NextPage = () => (
   <Layout PageTitle="404 Not Found">
