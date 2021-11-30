@@ -27,7 +27,7 @@ const Footer: FC = () => (
             </Link>
           </li>
           <li>
-            <Link href="Growthers/posts/privacy">
+            <Link href="/Growthers/posts/privacy">
               <a>プライバシーポリシー</a>
             </Link>
           </li>
