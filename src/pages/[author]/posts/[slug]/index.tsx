@@ -238,11 +238,32 @@ const DisplayDate: FC<DisplayDateProps> = ({ create, update }) => {
   );
 };
 
+type YearPassProps = {
+  create: string;
+  update: string;
+};
+
+const HasPassed: FC<YearPassProps> = ({ create, update }) => {
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (create === "" && update === "") return <></>;
+  const { UNIXTime: UunixTime } = DayParam(update);
+  const nowUNIXTime = Math.floor(new Date().getTime() / 1000);
+  const year = Math.floor((nowUNIXTime - UunixTime) / 31536000);
+
+  if (year) return <div className="flex justify-center">この記事は最終更新から{year}年以上経過しています。</div>;
+
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <></>;
+};
+
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
 
   return (
-    <Layout PageTitle={props.title}>
+    <Layout
+    PageTitle={props.title}
+    PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
+  >
       <div className="m-6">
         <p className="flex justify-center p-4 text-3xl font-bold">{props.title}</p>
         <div className="flex justify-center items-center">
@@ -252,6 +273,7 @@ const index: NextPage<AfterProps> = (props) => {
         <div className="flex flex-col mt-3">
           <DisplayDate create={props.date} update={props.lastupdate} />
         </div>
+        <HasPassed create={props.date} update={props.lastupdate} />
       </div>
       <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
         <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
