@@ -112,6 +112,22 @@ const linkBlock = (
 
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
+
+  const zeroPadding = (targetWord: string, size: number, fillWord: string): string => {
+    const len: number = targetWord.length;
+
+    if (targetWord === undefined || size === undefined || size < len) return "";
+
+    const fillw: string = fillWord === undefined ? "0" : fillWord;
+    const targetw: string = targetWord === undefined ? "0" : targetWord;
+    const str: string[] = targetw.split(/[\S|\s]/);
+    const zero = new Array<string>(size - len).fill(fillw);
+
+    const name = "kousuke";
+
+    return name;
+  };
+
   return (
     <Layout PageTitle={props.title}>
       <div className="m-6">
@@ -122,6 +138,9 @@ const index: NextPage<AfterProps> = (props) => {
           <p className="text-lg">{props.authorName}</p>
         </div>
       </div>
+
+      <div>{zeroPadding}</div>
+
       <div className="bg-white m-auto mb-10 p-8 rounded-3xl w-3/4">
         <ReactMarkdown
           remarkPlugins={[remarkGFM]}

@@ -1,6 +1,5 @@
 import { InferGetStaticPropsType, NextPage } from "next";
 import Link from "next/link";
-
 import { getPosts } from "utils/api";
 import Layout from "components/Layout";
 
