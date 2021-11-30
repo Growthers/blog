@@ -10,6 +10,9 @@ import { getPosts, getPost, ArticleInfo } from "utils/api";
 import Layout from "components/Layout";
 import Author from "components/Author";
 
+import { FC } from "react";
+import { create } from "node:domain";
+
 type BeforeProps = ArticleInfo;
 
 type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
@@ -113,19 +116,55 @@ const linkBlock = (
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
 
-  const zeroPadding = (targetWord: string, size: number, fillWord: string): string => {
+  const zeroPadding = (targetWord: string, size: number, fillWord = "0"): string => {
     const len: number = targetWord.length;
-
-    if (targetWord === undefined || size === undefined || size < len) return "";
-
     const fillw: string = fillWord === undefined ? "0" : fillWord;
-    const targetw: string = targetWord === undefined ? "0" : targetWord;
-    const str: string[] = targetw.split(/[\S|\s]/);
-    const zero = new Array<string>(size - len).fill(fillw);
+    const zero = new Array<string>(size - len).fill(fillw).join("");
+    const result = zero + targetWord;
+    return result;
+  };
 
-    const name = "kousuke";
+  const DayParam: FC = () => {
+    /**
+     const createDate = new Date("Sun Nov 3 2021 09:00:00 GMT+0900 (日本標準時)");
+     const updateDate = new Date("Sun Nov 12 2021 23:37:04 GMT+0900 (日本標準時)");
+    */
 
-    return name;
+    const createDate = new Date(props.date);
+    const updateDate = new Date(props.lastupdate);
+
+    const createYear = createDate.getFullYear();
+    const createMonth = createDate.getMonth();
+    const createDay = createDate.getDate();
+
+    const updateYear = updateDate.getFullYear();
+    const updateMonth = updateDate.getMonth();
+    const updateDay = updateDate.getDate();
+
+    const createTemp = `${zeroPadding(String(createYear), 4)}年${zeroPadding(String(createMonth), 2)}月${zeroPadding(
+      String(createDay),
+      2,
+    )}日に作成`;
+    const updateTemp = `${zeroPadding(String(updateYear), 4)}年${zeroPadding(String(updateMonth), 2)}月${zeroPadding(
+      String(updateDay),
+      2,
+    )}日に更新`;
+
+    if (String(createDate) === "" && String(updateDate) === "") return {};
+    if (String(createDate) === "") return <div className="flex justify-center">{updateTemp}</div>;
+    if (String(updateDate) === "") return <div className="flex justify-center">{createTemp}</div>;
+    if (
+      +(createDate >= updateDate) ||
+      (createYear === updateYear && createMonth === updateMonth && createDay === updateDay)
+    )
+      return <div className="flex justify-center">{createTemp}</div>;
+    return (
+      <div className="flex justify-center">
+        {createTemp}
+        <br />
+        {updateTemp}
+      </div>
+    );
   };
 
   return (
@@ -137,9 +176,9 @@ const index: NextPage<AfterProps> = (props) => {
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
           <p className="text-lg">{props.authorName}</p>
         </div>
-      </div>
 
-      <div>{zeroPadding}</div>
+        <DayParam />
+      </div>
 
       <div className="bg-white m-auto mb-10 p-8 rounded-3xl w-3/4">
         <ReactMarkdown
