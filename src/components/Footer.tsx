@@ -1,24 +1,21 @@
 import type { FC } from "react";
-import Image from "next/image";
 import Link from "next/link";
-
-import logo from "../../public/growthers.png";
 
 const Footer: FC = () => (
   <div className="bg-white py-5 px-14">
-    <div className="mt-5 flex justify-around items-start">
-      <div>
+    <div className="mt-5 flex justify-around items-start flex-col md:flex-row">
+      <div className="mt-2 mb-4">
         <Link href="/">
           <a className="flex justify-center items-center">
-            <Image className="rounded-full h-12 w-12" src={logo} alt="growthers" width={45} height={45} />
+            <img className="rounded-full h-12 w-12" src="/growthers.png" alt="growthers" />
             <p className="mx-2 text-lg">共同開発鯖 - Blog</p>
           </a>
         </Link>
       </div>
-      <div>
+      <div className="my-2">
         <p className="text-lg">Contents</p>
       </div>
-      <div>
+      <div className="my-2">
         <p className="text-lg">About</p>
         <ul>
           <li>
@@ -33,7 +30,7 @@ const Footer: FC = () => (
           </li>
         </ul>
       </div>
-      <div>
+      <div className="my-2">
         <p className="text-lg">Growthers</p>
         <ul>
           <li>
