@@ -39,6 +39,7 @@
       "components": [ "Link" ],
       "specialLink": [ "hrefLeft", "hrefRight" ],
       "aspects": [ "invalidHref", "preferButton" ]
-    }]
+    }],
+    "@next/next/no-img-element": "off"
   }
 }
