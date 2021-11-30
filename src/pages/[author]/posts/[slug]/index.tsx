@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
+import { FC } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -9,9 +10,6 @@ import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost, ArticleInfo } from "utils/api";
 import Layout from "components/Layout";
 import Author from "components/Author";
-
-import { FC } from "react";
-import { create } from "node:domain";
 
 type BeforeProps = ArticleInfo;
 
@@ -113,59 +111,80 @@ const linkBlock = (
   return <a href={href}>{children}</a>;
 };
 
+const fillzero = (num: number, digit: number) => `${"0".repeat(digit)}${num}`.slice(-1 * digit);
+
+const DayParam = (strDate: string) => {
+  let info = {
+    isDate: false,
+    year: "",
+    month: "",
+    day: "",
+    UNIXTime: 0,
+  };
+
+  if (strDate === "") return info;
+
+  const date = new Date(strDate);
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const UNIXTime = Math.floor(date.getTime() / 1000);
+
+  info = {
+    isDate: true,
+    year: fillzero(year, 4),
+    month: fillzero(month, 2),
+    day: fillzero(day, 2),
+    UNIXTime,
+  };
+
+  return info;
+};
+
+type DateObjectProps = {
+  year: string;
+  month: string;
+  day: string;
+  headcomment: string;
+  tailcomment: string;
+};
+
+const DateObject: FC<DateObjectProps> = ({ year, month, day, headcomment, tailcomment }) => (
+  <div className="flex justify-center">
+    {headcomment}
+    {year}年{month}月{day}日{tailcomment}
+  </div>
+);
+
+type DisplayDateProps = {
+  create: string;
+  update: string;
+};
+
+const DisplayDate: FC<DisplayDateProps> = ({ create, update }) => {
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  if (create === "" && update === "") return <></>;
+
+  const { isDate: isCreate, year: Cyear, month: Cmonth, day: Cday, UNIXTime: CunixTime } = DayParam(create);
+  const { isDate: isUpdate, year: Uyear, month: Umonth, day: Uday, UNIXTime: UunixTime } = DayParam(create);
+
+  if (CunixTime > UunixTime)
+    return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
+  if (!isUpdate) return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
+  if (!isCreate) return <DateObject year={Uyear} month={Umonth} day={Uday} headcomment="" tailcomment="に更新" />;
+  if (Cyear === Uyear && Cmonth === Umonth && Cday === Uday)
+    return <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />;
+  return (
+    <>
+      <DateObject year={Cyear} month={Cmonth} day={Cday} headcomment="" tailcomment="に作成" />
+      <DateObject year={Uyear} month={Umonth} day={Uday} headcomment="" tailcomment="に更新" />
+    </>
+  );
+};
+
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
-
-  const zeroPadding = (targetWord: string, size: number, fillWord = "0"): string => {
-    const len: number = targetWord.length;
-    const fillw: string = fillWord === undefined ? "0" : fillWord;
-    const zero = new Array<string>(size - len).fill(fillw).join("");
-    const result = zero + targetWord;
-    return result;
-  };
-
-  const DayParam: FC = () => {
-    /**
-     const createDate = new Date("Sun Nov 3 2021 09:00:00 GMT+0900 (日本標準時)");
-     const updateDate = new Date("Sun Nov 12 2021 23:37:04 GMT+0900 (日本標準時)");
-    */
-
-    const createDate = new Date(props.date);
-    const updateDate = new Date(props.lastupdate);
-
-    const createYear = createDate.getFullYear();
-    const createMonth = createDate.getMonth();
-    const createDay = createDate.getDate();
-
-    const updateYear = updateDate.getFullYear();
-    const updateMonth = updateDate.getMonth();
-    const updateDay = updateDate.getDate();
-
-    const createTemp = `${zeroPadding(String(createYear), 4)}年${zeroPadding(String(createMonth), 2)}月${zeroPadding(
-      String(createDay),
-      2,
-    )}日に作成`;
-    const updateTemp = `${zeroPadding(String(updateYear), 4)}年${zeroPadding(String(updateMonth), 2)}月${zeroPadding(
-      String(updateDay),
-      2,
-    )}日に更新`;
-
-    if (String(createDate) === "" && String(updateDate) === "") return {};
-    if (String(createDate) === "") return <div className="flex justify-center">{updateTemp}</div>;
-    if (String(updateDate) === "") return <div className="flex justify-center">{createTemp}</div>;
-    if (
-      +(createDate >= updateDate) ||
-      (createYear === updateYear && createMonth === updateMonth && createDay === updateDay)
-    )
-      return <div className="flex justify-center">{createTemp}</div>;
-    return (
-      <div className="flex justify-center">
-        {createTemp}
-        <br />
-        {updateTemp}
-      </div>
-    );
-  };
 
   return (
     <Layout PageTitle={props.title}>
@@ -176,10 +195,8 @@ const index: NextPage<AfterProps> = (props) => {
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
           <p className="text-lg">{props.authorName}</p>
         </div>
-
-        <DayParam />
+        <DisplayDate create={props.date} update={props.lastupdate} />
       </div>
-
       <div className="bg-white m-auto mb-10 p-8 rounded-3xl w-3/4">
         <ReactMarkdown
           remarkPlugins={[remarkGFM]}
