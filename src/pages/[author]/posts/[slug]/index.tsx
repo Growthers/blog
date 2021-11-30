@@ -231,7 +231,10 @@ const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
 
   return (
-    <Layout PageTitle={props.title}>
+    <Layout
+    PageTitle={props.title}
+    PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
+  >
       <div className="m-6">
         <p className="flex justify-center p-4 text-3xl font-bold">{props.title}</p>
         <div className="flex justify-center items-center">
