@@ -1,0 +1,20 @@
+on: [workflow_dispatch]
+
+env:
+  HUSKY: 0
+
+jobs:
+  test:
+    name: Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        # if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Audit
+        run: yarn audit
