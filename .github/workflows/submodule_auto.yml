@@ -1,6 +1,6 @@
 on:
   repository_dispatch:
-    types: [workflow_dispatch]
+    types: [update_data]
 
 jobs:
   update:
