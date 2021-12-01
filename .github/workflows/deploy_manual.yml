@@ -25,7 +25,7 @@ jobs:
         run: yarn export
 
       - name: Add CNAME file
-        run: echo "blog.growthers.dev" > CNAME
+        run: echo "blog.growthers.dev" > ./out/CNAME
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
