@@ -1,5 +1,11 @@
 import { InferGetStaticPropsType, NextPage } from "next";
 import Link from "next/link";
+import moment from "moment";
+import "moment/locale/ja";
+
+import { FaUserCircle } from "react-icons/fa";
+import { MdUpdate } from "react-icons/md";
+
 import { getPosts } from "utils/api";
 import Layout from "components/Layout";
 
@@ -36,23 +42,30 @@ export const getStaticProps = () => {
 
 const Home: NextPage<Props> = ({ posts }) => (
   <Layout PageTitle="共同開発鯖 - Blog">
-    <div>記事一覧</div>
-    <div>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.title}>
-            {post.title}
-            <ul>
-              <li>
-                <Link href={`/${post.author}/posts/${post.slug}`}>{`${post.author}の${post.slug}`}</Link>
-              </li>
-              <li>
-                <Link href={`/${post.author}`}>{`${post.author}のページ`}</Link>
-              </li>
-            </ul>
-          </li>
-        ))}
-      </ul>
+    <div className="flex justify-center p-4 text-3xl font-bold">記事一覧</div>
+    <div className="m-auto flex justify-start w-11/12 md:w-5/6 lg:w-7/12">
+      {posts.map((post) => (
+        <div className="bg-white py-4 px-6 rounded-lg" key={post.title}>
+          <Link href={`/${post.author}/posts/${post.slug}`}>
+            <a className="py-3 text-xl font-extrabold text-black truncate">{post.title}</a>
+          </Link>
+          <Link href={`/${post.author}`}>
+            <a>
+              <div className="flex items-center mt-1">
+                {post.icon !== "" && <img className="h-8 w-8 rounded-full" src={post.icon} alt={post.authorName} />}
+                {post.icon === "" && <FaUserCircle className="h-8 w-8" />}
+                <div className="ml-2">
+                  <p>{post.authorName}</p>
+                  <div className="flex items-center">
+                    <MdUpdate />
+                    <p className="ml-1 text-sm">{moment(post.date).fromNow()}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </Link>
+        </div>
+      ))}
     </div>
   </Layout>
 );
