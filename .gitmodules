@@ -1,4 +1,4 @@
 [submodule "data"]
-	path = data
-	url = https://github.com/Growthers/blog-data.git
+  path = data
+  url = https://github.com/Growthers/blog-data.git
   branch = main
