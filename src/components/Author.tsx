@@ -22,21 +22,21 @@ const Author: FC<Props> = (props) => {
 
   return (
     <div className="bg-white flex items-start w-full">
-      {isIconURL && <img className="w-16 h-16 rounded-full" src={IconURL} alt={AuthorName} />}
-      {!isIconURL && <FaUserCircle className="w-16 h-16" />}
+      {isIconURL && <img className="h-12 w-12 sm:h-16 sm:w-16 rounded-full" src={IconURL} alt={AuthorName} />}
+      {!isIconURL && <FaUserCircle className="h-12 w-12 sm:h-16 sm:w-16" />}
       <div className="ml-4">
-        <div className="flex items-center">
+        <div className="sm:flex justify-start items-center">
           <p className="text-lg font-black">{AuthorName}</p>
           <div className="mx-2 text-sm flex items-end flex-wrap">
             {Roles.map((value) => (
-              <p className="mx-1 p-1 bg-gray-300 rounded-md" key={value}>
+              <p className="mx-1 p-1 bg-gray-300 rounded-md break-all" key={value}>
                 {value}
               </p>
             ))}
           </div>
         </div>
         <div className="my-3 break-all">{Bio}</div>
-        <div className="flex items-center">
+        <div className="sm:flex justify-start items-center">
           {isSiteURL && (
             <div className="mr-4">
               <Link href={SiteURL}>
