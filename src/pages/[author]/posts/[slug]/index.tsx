@@ -250,7 +250,12 @@ const HasPassed: FC<YearPassProps> = ({ create, update }) => {
   const nowUNIXTime = Math.floor(new Date().getTime() / 1000);
   const year = Math.floor((nowUNIXTime - UunixTime) / 31536000);
 
-  if (year) return <div className="flex justify-center">この記事は最終更新から{year}年以上経過しています。</div>;
+  if (year)
+    return (
+      <div className="bg-yellow-300 p-4 mb-2 flex justify-center rounded">
+        この記事は最終更新から{year}年以上が経過しています
+      </div>
+    );
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <></>;
@@ -261,9 +266,9 @@ const index: NextPage<AfterProps> = (props) => {
 
   return (
     <Layout
-    PageTitle={props.title}
-    PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
-  >
+      PageTitle={props.title}
+      PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
+    >
       <div className="m-6">
         <p className="flex justify-center p-4 text-3xl font-bold">{props.title}</p>
         <div className="flex justify-center items-center">
@@ -273,9 +278,9 @@ const index: NextPage<AfterProps> = (props) => {
         <div className="flex flex-col mt-3">
           <DisplayDate create={props.date} update={props.lastupdate} />
         </div>
-        <HasPassed create={props.date} update={props.lastupdate} />
       </div>
       <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
+        <HasPassed create={props.date} update={props.lastupdate} />
         <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
           <ReactMarkdown
             remarkPlugins={[remarkGFM]}
