@@ -1,6 +1,4 @@
-on:
-  repository_dispatch:
-    types: [workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   update:
