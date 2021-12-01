@@ -42,12 +42,14 @@ export const getStaticProps = () => {
 
 const Home: NextPage<Props> = ({ posts }) => (
   <Layout PageTitle="共同開発鯖 - Blog">
-    <div className="flex justify-center p-4 text-3xl font-bold">記事一覧</div>
-    <div className="m-auto flex justify-start w-11/12 md:w-5/6 lg:w-7/12">
+    <div className="flex justify-center my-10 p-4 text-3xl font-bold">記事一覧</div>
+    <div className="m-auto flex justify-center sm:justify-around flex-wrap w-11/12">
       {posts.map((post) => (
-        <div className="bg-white py-4 px-6 rounded-lg" key={post.title}>
+        <div className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden w-full sm:w-5/12 lg:w-1/5" key={post.title}>
           <Link href={`/${post.author}/posts/${post.slug}`}>
-            <a className="py-3 text-xl font-extrabold text-black truncate">{post.title}</a>
+            <a className="w-full py-3 text-xl font-extrabold text-black truncate" title={post.title}>
+              <p className="truncate">{post.title}</p>
+            </a>
           </Link>
           <Link href={`/${post.author}`}>
             <a>
@@ -58,7 +60,7 @@ const Home: NextPage<Props> = ({ posts }) => (
                   <p>{post.authorName}</p>
                   <div className="flex items-center">
                     <MdUpdate />
-                    <p className="ml-1 text-sm">{moment(post.date).fromNow()}</p>
+                    <p className="ml-1 text-sm font-light">{moment(post.date).fromNow()}</p>
                   </div>
                 </div>
               </div>
