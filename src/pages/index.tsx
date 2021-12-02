@@ -31,6 +31,7 @@ export const getStaticProps = () => {
       }
       return bD.getFullYear() - aD.getFullYear();
     })
+    .filter((element) => new Date(element.date).getDate())
     .slice(0, 21);
 
   return {
