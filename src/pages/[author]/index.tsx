@@ -36,7 +36,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
 export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
   const data = getPosts()
-    .filter((element) => element.author === params?.author)
+    .filter((element) => element.author === params?.author && new Date(element.date).getDate())
     .slice(0, 11);
 
   return {
