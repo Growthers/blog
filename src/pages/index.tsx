@@ -61,7 +61,7 @@ const Home: NextPage<Props> = ({ posts }) => (
                   <p>{post.authorName}</p>
                   <div className="flex items-center">
                     <MdUpdate />
-                    <p className="ml-1 text-sm font-light">{moment(post.date).fromNow()}</p>
+                    <p className="ml-1 text-sm font-light">{moment(new Date(post.date)).fromNow()}</p>
                   </div>
                 </div>
               </div>
