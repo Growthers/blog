@@ -43,28 +43,6 @@ jobs:
       - update
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Lint
-        run: yarn lint --max-warnings=0
-
-      - name: Build
-        run: yarn build
-
-      - name: Export
-        run: yarn export
-
-      - name: Add CNAME file
-        run: echo "blog.growthers.dev" > ./out/CNAME
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+      - name: Request
+        run: |
+          curl -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" -H "Accept: application/vnd.github.v3+json"  ${{ secrets.DISPATCHES_URL }} -d '{"event_type":"deploy"}'
