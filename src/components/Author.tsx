@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaLink, FaGithub, FaTwitter, FaUserCircle } from "react-icons/fa";
 
 type Props = {
+  Author: string;
   AuthorName: string;
   IconURL: string;
   Bio: string;
@@ -14,7 +15,7 @@ type Props = {
 };
 
 const Author: FC<Props> = (props) => {
-  const { AuthorName, IconURL, Bio, SiteURL, GitHubID, TwitterID, Roles } = props;
+  const { Author: AuthorID, AuthorName, IconURL, Bio, SiteURL, GitHubID, TwitterID, Roles } = props;
   const isIconURL = IconURL !== "";
   const isSiteURL = SiteURL !== "";
   const isGitHubID = GitHubID !== "";
@@ -22,11 +23,19 @@ const Author: FC<Props> = (props) => {
 
   return (
     <div className="bg-white flex items-start w-full">
-      {isIconURL && <img className="h-12 w-12 sm:h-16 sm:w-16 rounded-full" src={IconURL} alt={AuthorName} />}
-      {!isIconURL && <FaUserCircle className="h-12 w-12 sm:h-16 sm:w-16" />}
+      <Link href={`/${AuthorID}/`}>
+        <a>
+          {isIconURL && <img className="h-12 w-12 sm:h-16 sm:w-16 rounded-full" src={IconURL} alt={AuthorName} />}
+          {!isIconURL && <FaUserCircle className="h-12 w-12 sm:h-16 sm:w-16" />}
+        </a>
+      </Link>
       <div className="ml-4">
         <div className="sm:flex justify-start items-center">
-          <p className="text-lg font-black">{AuthorName}</p>
+          <Link href={`/${AuthorID}/`}>
+            <a>
+              <p className="text-lg font-black">{AuthorName}</p>
+            </a>
+          </Link>
           <div className="mx-2 text-sm flex items-end flex-wrap">
             {Roles.map((value) => (
               <p className="mx-1 p-1 bg-gray-300 rounded-md break-all" key={value}>

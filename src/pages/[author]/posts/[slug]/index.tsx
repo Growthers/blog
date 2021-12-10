@@ -173,6 +173,7 @@ const index: NextPage<AfterProps> = (props) => {
           <Script src="https://platform.twitter.com/widgets.js" />
           <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
             <Author
+              Author={props.author}
               AuthorName={props.authorName}
               IconURL={props.icon}
               Bio={props.bio}
