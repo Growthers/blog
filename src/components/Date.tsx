@@ -35,7 +35,8 @@ export const DayParam = (strDate: string) => {
 
   if (strDate === "") return info;
 
-  const date = new Date(strDate);
+  // Asia/Tokyo
+  const date = new Date(new Date(strDate).getTime() + 9 * 60 * 60 * 1000);
 
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
