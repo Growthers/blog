@@ -8,7 +8,7 @@ import { MdUpdate } from "react-icons/md";
 
 import { ArticleInfo, getPosts } from "utils/api";
 import Layout from "components/Layout";
-import Author from "components/Author";
+import AuthorProfile from "components/Author";
 
 type BeforeProps = {
   author?: string;
@@ -67,7 +67,8 @@ const index: NextPage<AfterProps> = (props) => (
         ))}
       </div>
       <div className="bg-white mx-auto my-4 p-2 sm:p-6 rounded-xl sm:w-11/12 md:w-5/6 lg:w-7/12">
-        <Author
+        <AuthorProfile
+          Author={props.posts[0].author}
           AuthorName={props.posts[0].authorName}
           IconURL={props.posts[0].icon}
           Bio={props.posts[0].bio}

@@ -10,7 +10,7 @@ import { ParsedUrlQuery } from "node:querystring";
 import { getPosts, getPost, ArticleInfo } from "utils/api";
 import { DisplayDate, HasPassed } from "components/Date";
 import Layout from "components/Layout";
-import Author from "components/Author";
+import AuthorProfile from "components/Author";
 
 type BeforeProps = ArticleInfo;
 
@@ -172,7 +172,7 @@ const index: NextPage<AfterProps> = (props) => {
           </ReactMarkdown>
           <Script src="https://platform.twitter.com/widgets.js" />
           <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
-            <Author
+            <AuthorProfile
               Author={props.author}
               AuthorName={props.authorName}
               IconURL={props.icon}

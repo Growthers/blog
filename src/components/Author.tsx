@@ -14,7 +14,7 @@ type Props = {
   Roles: string[];
 };
 
-const Author: FC<Props> = (props) => {
+const AuthorProfile: FC<Props> = (props) => {
   const { Author: AuthorID, AuthorName, IconURL, Bio, SiteURL, GitHubID, TwitterID, Roles } = props;
   const isIconURL = IconURL !== "";
   const isSiteURL = SiteURL !== "";
@@ -88,4 +88,4 @@ const Author: FC<Props> = (props) => {
   );
 };
 
-export default Author;
+export default AuthorProfile;
