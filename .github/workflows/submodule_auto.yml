@@ -1,3 +1,4 @@
+name: Automatic Updating Blog Data
 on:
   repository_dispatch:
     types: [update_data]
@@ -35,14 +36,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-
-  build:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs:
-      - update
-
-    steps:
-      - name: Request
-        run: |
-          curl -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" -H "Accept: application/vnd.github.v3+json"  ${{ secrets.DISPATCHES_URL }} -d '{"event_type":"deploy"}'
