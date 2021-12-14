@@ -1,3 +1,4 @@
+name: Updating Blog Data
 on: [workflow_dispatch]
 
 jobs:
