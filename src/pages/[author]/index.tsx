@@ -59,7 +59,7 @@ const index: NextPage<AfterProps> = (props) => (
                 <p className="truncate">{post.title}</p>
                 <div className="flex items-center mt-1">
                   <MdUpdate />
-                  <p className="ml-1 text-sm font-light">{moment(post.date).fromNow()}</p>
+                  <p className="ml-1 text-sm font-light">{moment(new Date(post.date)).fromNow()}</p>
                 </div>
               </a>
             </Link>
