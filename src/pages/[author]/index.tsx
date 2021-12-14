@@ -48,8 +48,10 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
 };
 
 const index: NextPage<AfterProps> = (props) => (
-  <Layout PageTitle={`${props.author} - Blog`}>
-    <div className="flex justify-center my-10 p-4 text-3xl font-bold overflow-hidden">{props.author}の記事</div>
+  <Layout PageTitle={`${props.posts[0].authorName} - Blog`}>
+    <div className="flex justify-center my-10 p-4 text-3xl font-bold overflow-hidden">
+      {props.posts[0].authorName}の記事
+    </div>
     <div className="m-auto w-11/12">
       <div className="w-full my-8 flex justify-center sm:justify-around flex-wrap">
         {props.posts.map((post) => (
