@@ -3,7 +3,8 @@ import Script from "next/script";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import * as ogp from "ogp-parser";
+import axios from "axios";
+import cheerio from "cheerio";
 
 import { ParsedUrlQuery } from "node:querystring";
 
@@ -21,6 +22,13 @@ type Params = ParsedUrlQuery & {
   slug: string;
 };
 
+type OgpData = {
+  url: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
+};
+
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const posts = getPosts();
 
@@ -35,7 +43,28 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   };
 };
 
-const GetOgp = async (url: string) => ogp.default(url);
+const GetOgp = async (url: string) => {
+  const res = await axios.get(encodeURI(url));
+  const html = res.data;
+  const $ = cheerio.load(html);
+
+  const title = $("title").text();
+  const description = $('meta[property="og:description"]').attr("content");
+  const image = $('meta[property="og:image"]').attr("content");
+
+  const info: OgpData = {
+    url,
+    title: null,
+    description: null,
+    image: null,
+  };
+
+  info.title = title === undefined ? null : title;
+  info.description = description === undefined ? null : description;
+  info.image = image === undefined ? null : image;
+
+  return info;
+};
 
 const DisplayOgp = (url: string, title: string, description: string, isImage: boolean, image: string) => {
   if (title === "") return "";
@@ -77,11 +106,12 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
 
   const httpURL = /https?:\/\/[\w!?/+\-_~;.,*&@#$%=']+/gim;
 
-  const Links = data.content.match(httpURL);
-  let OGPs: ogp.OgpParserResult[];
+  const GetLinks = data.content.match(httpURL);
+  const Links = Array.from(new Set(GetLinks));
+  let OGPs: OgpData[];
   const contents = data.content.split(/\r?\n/);
 
-  if (Links !== null) {
+  if (Links.length !== 0) {
     OGPs = await Promise.all(
       Links.map(async (item) => {
         const url = item.match(httpURL);
@@ -95,8 +125,9 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
     );
 
     contents.forEach((content, index) => {
-      const contentLinks = content.match(httpURL);
-      if (contentLinks === null) return;
+      const GetcontentLinks = content.match(httpURL);
+      const contentLinks = Array.from(new Set(GetcontentLinks));
+      if (contentLinks.length === 0) return;
 
       contentLinks.forEach((val) => {
         const ogpIndex = Links.indexOf(val);
@@ -113,10 +144,10 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
           return;
         }
 
-        const ogpData = OGPs[ogpIndex];
-        const { title } = ogpData;
-        const description = "og:description" in ogpData.ogp ? ogpData.ogp["og:description"][0] : "";
-        const image = "og:image" in ogpData.ogp ? ogpData.ogp["og:image"][0] : "";
+        const ogp = OGPs[ogpIndex];
+        const title = ogp.title === null ? "" : ogp.title;
+        const description = ogp.description === null ? "" : ogp.description;
+        const image = ogp.image === null ? "" : ogp.image;
         const isImage = image !== "";
         contents[index] = `${contents[index]}\n${DisplayOgp(val, title, description, isImage, image)}\n`;
       });
