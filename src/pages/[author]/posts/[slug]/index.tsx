@@ -190,7 +190,7 @@ const index: NextPage<AfterProps> = (props) => {
       PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
     >
       <div className="m-6">
-        <p className="flex justify-center p-4 text-3xl font-bold truncate">{props.title}</p>
+        <p className="flex justify-center p-4 text-xl lg:text-3xl font-bold break-all">{props.title}</p>
         <div className="flex justify-center items-center">
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
           <p className="text-lg">{props.authorName}</p>

@@ -53,12 +53,15 @@ const index: NextPage<AfterProps> = (props) => (
       {props.posts[0].authorName}の記事
     </div>
     <div className="m-auto w-11/12">
-      <div className="w-full my-8 flex justify-center sm:justify-around flex-wrap">
+      <div className="w-full my-8 flex justify-center items-center sm:justify-around flex-wrap">
         {props.posts.map((post) => (
-          <div className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden w-full sm:w-5/12 lg:w-1/5" key={post.title}>
+          <div
+            className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden h-full w-full sm:w-5/12 lg:w-1/5"
+            key={post.title}
+          >
             <Link href={`/${post.author}/posts/${post.slug}`}>
               <a className="w-full py-3 text-xl font-extrabold text-black" title={post.title}>
-                <p className="truncate">{post.title}</p>
+                <p className="break-all">{post.title}</p>
                 <div className="flex items-center mt-1">
                   <MdUpdate />
                   <p className="ml-1 text-sm font-light">{moment(new Date(post.date)).fromNow()}</p>
