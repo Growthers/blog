@@ -75,7 +75,7 @@ const DisplayOgp = (url: string, title: string, description: string, isImage: bo
 export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
   const data = getPost(params?.author, params?.slug);
 
-  const httpURL = /https?:\/\/[\w!?/+\-_~;.,*&@#$%='[\]]+/gim;
+  const httpURL = /https?:\/\/[\w!?/+\-_~;.,*&@#$%=']+/gim;
 
   const Links = data.content.match(httpURL);
   let OGPs: ogp.OgpParserResult[];
