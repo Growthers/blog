@@ -75,7 +75,7 @@ const DisplayOgp = (url: string, title: string, description: string, isImage: bo
 export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
   const data = getPost(params?.author, params?.slug);
 
-  const httpURL = /(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|]/gim;
+  const httpURL = /https?:\/\/[\w!?/+\-_~;.,*&@#$%='[\]]+/gim;
 
   const Links = data.content.match(httpURL);
   let OGPs: ogp.OgpParserResult[];
@@ -102,12 +102,23 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
         const ogpIndex = Links.indexOf(val);
         if (ogpIndex === -1) return;
 
+        const urlParams = new URLSearchParams(val.split("?")[1]);
+        const isOgp = urlParams.has("isogp");
+
+        // isogpがあればOGPを非表示にする
+        if (isOgp === true) {
+          // urlの変更
+          const replaceVal = val.replace(`isogp=${urlParams.get("isogp")}`, " ");
+          contents[index] = contents[index].replace(val, replaceVal);
+          return;
+        }
+
         const ogpData = OGPs[ogpIndex];
         const { title } = ogpData;
         const description = "og:description" in ogpData.ogp ? ogpData.ogp["og:description"][0] : "";
         const image = "og:image" in ogpData.ogp ? ogpData.ogp["og:image"][0] : "";
         const isImage = image !== "";
-        contents[index] = `${content}\n${DisplayOgp(val, title, description, isImage, image)}\n`;
+        contents[index] = `${contents[index]}\n${DisplayOgp(val, title, description, isImage, image)}\n`;
       });
     });
   }
