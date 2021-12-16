@@ -3,14 +3,15 @@ import Script from "next/script";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import * as ogp from "ogp-parser";
+import axios from "axios";
+import cheerio from "cheerio";
 
 import { ParsedUrlQuery } from "node:querystring";
 
 import { getPosts, getPost, ArticleInfo } from "utils/api";
 import { DisplayDate, HasPassed } from "components/Date";
 import Layout from "components/Layout";
-import Author from "components/Author";
+import AuthorProfile from "components/Author";
 
 type BeforeProps = ArticleInfo;
 
@@ -19,6 +20,13 @@ type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
 type Params = ParsedUrlQuery & {
   author: string;
   slug: string;
+};
+
+type OgpData = {
+  url: string;
+  title: string | null;
+  description: string | null;
+  image: string | null;
 };
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
@@ -35,7 +43,28 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   };
 };
 
-const GetOgp = async (url: string) => ogp.default(url);
+const GetOgp = async (url: string) => {
+  const res = await axios.get(encodeURI(url));
+  const html = res.data;
+  const $ = cheerio.load(html);
+
+  const title = $("title").text();
+  const description = $('meta[property="og:description"]').attr("content");
+  const image = $('meta[property="og:image"]').attr("content");
+
+  const info: OgpData = {
+    url,
+    title: null,
+    description: null,
+    image: null,
+  };
+
+  info.title = title === undefined ? null : title;
+  info.description = description === undefined ? null : description;
+  info.image = image === undefined ? null : image;
+
+  return info;
+};
 
 const DisplayOgp = (url: string, title: string, description: string, isImage: boolean, image: string) => {
   if (title === "") return "";
@@ -75,13 +104,14 @@ const DisplayOgp = (url: string, title: string, description: string, isImage: bo
 export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
   const data = getPost(params?.author, params?.slug);
 
-  const httpURL = /(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|]/gim;
+  const httpURL = /https?:\/\/[\w!?/+\-_~;.,*&@#$%=']+/gim;
 
-  const Links = data.content.match(httpURL);
-  let OGPs: ogp.OgpParserResult[];
+  const GetLinks = data.content.match(httpURL);
+  const Links = Array.from(new Set(GetLinks));
+  let OGPs: OgpData[];
   const contents = data.content.split(/\r?\n/);
 
-  if (Links !== null) {
+  if (Links.length !== 0) {
     OGPs = await Promise.all(
       Links.map(async (item) => {
         const url = item.match(httpURL);
@@ -95,19 +125,31 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
     );
 
     contents.forEach((content, index) => {
-      const contentLinks = content.match(httpURL);
-      if (contentLinks === null) return;
+      const GetcontentLinks = content.match(httpURL);
+      const contentLinks = Array.from(new Set(GetcontentLinks));
+      if (contentLinks.length === 0) return;
 
       contentLinks.forEach((val) => {
         const ogpIndex = Links.indexOf(val);
         if (ogpIndex === -1) return;
 
-        const ogpData = OGPs[ogpIndex];
-        const { title } = ogpData;
-        const description = "og:description" in ogpData.ogp ? ogpData.ogp["og:description"][0] : "";
-        const image = "og:image" in ogpData.ogp ? ogpData.ogp["og:image"][0] : "";
+        const urlParams = new URLSearchParams(val.split("?")[1]);
+        const isOgp = urlParams.has("isogp");
+
+        // isogpがあればOGPを非表示にする
+        if (isOgp === true) {
+          // urlの変更
+          const replaceVal = val.replace(`isogp=${urlParams.get("isogp")}`, " ");
+          contents[index] = contents[index].replace(val, replaceVal);
+          return;
+        }
+
+        const ogp = OGPs[ogpIndex];
+        const title = ogp.title === null ? "" : ogp.title;
+        const description = ogp.description === null ? "" : ogp.description;
+        const image = ogp.image === null ? "" : ogp.image;
         const isImage = image !== "";
-        contents[index] = `${content}\n${DisplayOgp(val, title, description, isImage, image)}\n`;
+        contents[index] = `${contents[index]}\n${DisplayOgp(val, title, description, isImage, image)}\n`;
       });
     });
   }
@@ -148,7 +190,7 @@ const index: NextPage<AfterProps> = (props) => {
       PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
     >
       <div className="m-6">
-        <p className="flex justify-center p-4 text-3xl font-bold truncate">{props.title}</p>
+        <p className="flex justify-center p-4 text-xl lg:text-3xl font-bold break-all">{props.title}</p>
         <div className="flex justify-center items-center">
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
           <p className="text-lg">{props.authorName}</p>
@@ -172,7 +214,8 @@ const index: NextPage<AfterProps> = (props) => {
           </ReactMarkdown>
           <Script src="https://platform.twitter.com/widgets.js" />
           <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
-            <Author
+            <AuthorProfile
+              Author={props.author}
               AuthorName={props.authorName}
               IconURL={props.icon}
               Bio={props.bio}
