@@ -8,7 +8,7 @@ import { MdUpdate } from "react-icons/md";
 
 import { ArticleInfo, getPosts } from "utils/api";
 import Layout from "components/Layout";
-import Author from "components/Author";
+import AuthorProfile from "components/Author";
 
 type BeforeProps = {
   author?: string;
@@ -48,15 +48,20 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
 };
 
 const index: NextPage<AfterProps> = (props) => (
-  <Layout PageTitle={`${props.author} - Blog`}>
-    <div className="flex justify-center my-10 p-4 text-3xl font-bold overflow-hidden">{props.author}の記事</div>
+  <Layout PageTitle={`${props.posts[0].authorName} - Blog`}>
+    <div className="flex justify-center my-10 p-4 text-3xl font-bold overflow-hidden">
+      {props.posts[0].authorName}の記事
+    </div>
     <div className="m-auto w-11/12">
-      <div className="w-full my-8 flex justify-center sm:justify-around flex-wrap">
+      <div className="w-full my-8 flex justify-center items-center sm:justify-around flex-wrap">
         {props.posts.map((post) => (
-          <div className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden w-full sm:w-5/12 lg:w-1/5" key={post.title}>
+          <div
+            className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden h-full w-full sm:w-5/12 lg:w-1/5"
+            key={post.title}
+          >
             <Link href={`/${post.author}/posts/${post.slug}`}>
               <a className="w-full py-3 text-xl font-extrabold text-black" title={post.title}>
-                <p className="truncate">{post.title}</p>
+                <p className="break-all">{post.title}</p>
                 <div className="flex items-center mt-1">
                   <MdUpdate />
                   <p className="ml-1 text-sm font-light">{moment(new Date(post.date)).fromNow()}</p>
@@ -67,7 +72,8 @@ const index: NextPage<AfterProps> = (props) => (
         ))}
       </div>
       <div className="bg-white mx-auto my-4 p-2 sm:p-6 rounded-xl sm:w-11/12 md:w-5/6 lg:w-7/12">
-        <Author
+        <AuthorProfile
+          Author={props.posts[0].author}
           AuthorName={props.posts[0].authorName}
           IconURL={props.posts[0].icon}
           Bio={props.posts[0].bio}

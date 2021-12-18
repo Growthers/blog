@@ -44,12 +44,15 @@ export const getStaticProps = () => {
 const Home: NextPage<Props> = ({ posts }) => (
   <Layout PageTitle="共同開発鯖 - Blog">
     <div className="flex justify-center my-10 p-4 text-3xl font-bold">記事一覧</div>
-    <div className="m-auto flex justify-center sm:justify-around flex-wrap w-11/12">
+    <div className="m-auto flex justify-center items-center sm:justify-around flex-wrap w-11/12">
       {posts.map((post) => (
-        <div className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden w-full sm:w-5/12 lg:w-1/5" key={post.title}>
+        <div
+          className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden h-full w-full sm:w-5/12 lg:w-1/5"
+          key={post.title}
+        >
           <Link href={`/${post.author}/posts/${post.slug}`}>
-            <a className="w-full py-3 text-xl font-extrabold text-black truncate" title={post.title}>
-              <p className="truncate">{post.title}</p>
+            <a className="w-full py-3 text-xl font-extrabold text-black" title={post.title}>
+              <p className="break-all">{post.title}</p>
             </a>
           </Link>
           <Link href={`/${post.author}`}>
