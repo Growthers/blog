@@ -208,8 +208,9 @@ const index: NextPage<AfterProps> = (props) => {
         </div>
       </div>
       <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
-        <HasPassed create={props.date} update={props.lastupdate} />
-        <ShareButton url={`https://${DOMAIN}/${props.author}/posts/${props.slug}/`} title={props.title} />
+        <div>
+          <HasPassed create={props.date} update={props.lastupdate} />
+        </div>
         <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
           <ReactMarkdown
             remarkPlugins={[remarkGFM]}
