@@ -12,6 +12,7 @@ import { getPosts, getPost, ArticleInfo } from "utils/api";
 import { DisplayDate, HasPassed } from "components/Date";
 import Layout from "components/Layout";
 import AuthorProfile from "components/Author";
+import ShareButton from "components/Share";
 
 type BeforeProps = ArticleInfo;
 
@@ -28,6 +29,9 @@ type OgpData = {
   description: string | null;
   image: string | null;
 };
+
+const OGP_DOMAIN = process.env.NEXT_PUBLIC_OGP_DOMAIN ?? "";
+const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN ?? "";
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const posts = getPosts();
@@ -188,11 +192,10 @@ const linkBlock = (
 
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
-
   return (
     <Layout
       PageTitle={props.title}
-      PageImage={`https://og-image.growthers.dev/${props.title}.png?blog_author=${props.authorName}&background=blog`}
+      PageImage={`https://${OGP_DOMAIN}/${props.title}.png?blog_author=${props.authorName}&background=blog`}
     >
       <div className="m-6">
         <p className="flex justify-center p-4 text-xl lg:text-3xl font-bold break-all">{props.title}</p>
@@ -205,7 +208,9 @@ const index: NextPage<AfterProps> = (props) => {
         </div>
       </div>
       <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
-        <HasPassed create={props.date} update={props.lastupdate} />
+        <div>
+          <HasPassed create={props.date} update={props.lastupdate} />
+        </div>
         <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
           <ReactMarkdown
             remarkPlugins={[remarkGFM]}
@@ -217,6 +222,7 @@ const index: NextPage<AfterProps> = (props) => {
           >
             {props.content}
           </ReactMarkdown>
+          <ShareButton url={`https://${DOMAIN}/${props.author}/posts/${props.slug}/`} title={props.title} />
           <Script src="https://platform.twitter.com/widgets.js" />
           <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
             <AuthorProfile
