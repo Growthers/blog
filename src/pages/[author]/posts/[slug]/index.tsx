@@ -32,20 +32,25 @@ export const getStaticPaths: GetStaticPaths<SlugPath> = async () => {
 };
 
 const GetOgp = async (url: string) => {
-  const res = await axios.get(encodeURI(url));
-  const html = res.data;
-  const $ = cheerio.load(html);
-
-  const title = $("title").text();
-  const description = $('meta[property="og:description"]').attr("content");
-  const image = $('meta[property="og:image"]').attr("content");
-
   const info: OgpData = {
     url,
     title: null,
     description: null,
     image: null,
   };
+
+  const res = await axios
+    .get(encodeURI(url))
+    .then((response) => response)
+    .catch(() => null);
+  if (res === null) return info;
+
+  const html = res.data;
+  const $ = cheerio.load(html);
+
+  const title = $("title").text();
+  const description = $('meta[property="og:description"]').attr("content");
+  const image = $('meta[property="og:image"]').attr("content");
 
   info.title = title === undefined ? null : title;
   info.description = description === undefined ? null : description;
