@@ -1,15 +1,12 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import Link from "next/link";
-import moment from "moment";
 import "moment/locale/ja";
-
-import { MdUpdate } from "react-icons/md";
 
 import { getPosts } from "utils/api";
 import Layout from "components/Layout";
 import AuthorProfile from "components/AuthorProfile";
 import { ArticleInfo } from "types/markdownMeta";
 import { AuthorPath } from "types/paths";
+import PostCard from "../../components/PostCard";
 
 export const getStaticPaths: GetStaticPaths<AuthorPath> = async () => {
   const posts = getPosts();
@@ -42,20 +39,7 @@ const index: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts
     <div className="m-auto w-11/12">
       <div className="w-full my-8 flex justify-center items-center sm:justify-around flex-wrap">
         {posts.map((post) => (
-          <div
-            className="bg-white m-2 py-4 px-6 rounded-lg overflow-hidden h-full w-full sm:w-5/12 lg:w-1/5"
-            key={post.title}
-          >
-            <Link href={`/${post.author}/posts/${post.slug}`}>
-              <a className="w-full py-3 text-xl font-extrabold text-black" title={post.title}>
-                <p className="break-all">{post.title}</p>
-                <div className="flex items-center mt-1">
-                  <MdUpdate />
-                  <p className="ml-1 text-sm font-light">{moment(new Date(post.date)).fromNow()}</p>
-                </div>
-              </a>
-            </Link>
-          </div>
+          <PostCard post={post} showAuthor={false} key={post.slug} />
         ))}
       </div>
 
