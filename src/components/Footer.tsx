@@ -19,12 +19,12 @@ const Footer: FC = () => (
         <p className="text-lg">About</p>
         <ul>
           <li>
-            <Link href="/">
+            <Link href="/Growthers/posts/about-blog">
               <a>このサイトについて</a>
             </Link>
           </li>
           <li>
-            <Link href="/Growthers/posts/privacy">
+            <Link href="/Growthers/posts/policy">
               <a>プライバシーポリシー</a>
             </Link>
           </li>
