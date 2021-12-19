@@ -1,15 +1,11 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "node:querystring";
 
 import { getPosts } from "utils/api";
+import { AuthorPath } from "../../../types/paths";
 
-type Params = ParsedUrlQuery & {
-  author: string;
-};
-
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
+export const getStaticPaths: GetStaticPaths<AuthorPath> = async () => {
   const posts = getPosts();
 
   return {

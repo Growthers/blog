@@ -1,26 +1,14 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import Script from "next/script";
-import ReactMarkdown from "react-markdown";
-import remarkGFM from "remark-gfm";
-import rehypeRaw from "rehype-raw";
 import axios from "axios";
 import cheerio from "cheerio";
 
-import { ParsedUrlQuery } from "node:querystring";
-
-import { getPosts, getPost, ArticleInfo } from "utils/api";
+import { getPosts, getPost } from "utils/api";
 import { DisplayDate, HasPassed } from "components/Date";
 import Layout from "components/Layout";
-import AuthorProfile from "components/Author";
-
-type BeforeProps = ArticleInfo;
-
-type AfterProps = InferGetStaticPropsType<typeof getStaticProps>;
-
-type Params = ParsedUrlQuery & {
-  author: string;
-  slug: string;
-};
+import AuthorProfile from "components/AuthorProfile";
+import CustomReactMarkdown from "components/CustomdReactMarkdown";
+import { ArticleInfo } from "types/markdownMeta";
+import { SlugPath } from "types/paths";
 
 type OgpData = {
   url: string;
@@ -29,7 +17,7 @@ type OgpData = {
   image: string | null;
 };
 
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
+export const getStaticPaths: GetStaticPaths<SlugPath> = async () => {
   const posts = getPosts();
 
   return {
@@ -101,7 +89,7 @@ const DisplayOgp = (url: string, title: string, description: string, isImage: bo
   </a>`;
 };
 
-export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<ArticleInfo, SlugPath> = async ({ params }) => {
   const data = getPost(params?.author, params?.slug);
 
   const httpURL = /https?:\/\/[\w!?/+\-_~;.,*&@#$%=']+/gim;
@@ -137,7 +125,7 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
         const isOgp = urlParams.has("isogp");
 
         // isogpがあればOGPを非表示にする
-        if (isOgp === true) {
+        if (isOgp) {
           // urlの変更
           const replaceVal = val.replace(`isogp=${urlParams.get("isogp")}`, " ");
           contents[index] = contents[index].replace(val, replaceVal);
@@ -161,27 +149,7 @@ export const getStaticProps: GetStaticProps<BeforeProps, Params> = async ({ para
   };
 };
 
-const linkBlock = (
-  props: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
-): JSX.Element => {
-  const { href, children } = props;
-
-  if (href === undefined) {
-    return <a href={href}>{children}</a>;
-  }
-
-  if (href.match("http")) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        {children}
-      </a>
-    );
-  }
-
-  return <a href={href}>{children}</a>;
-};
-
-const index: NextPage<AfterProps> = (props) => {
+const index: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
   const isIconURL = props.icon !== "";
 
   return (
@@ -199,32 +167,23 @@ const index: NextPage<AfterProps> = (props) => {
           <DisplayDate create={props.date} update={props.lastupdate} />
         </div>
       </div>
+
       <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
         <HasPassed create={props.date} update={props.lastupdate} />
         <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
-          <ReactMarkdown
-            remarkPlugins={[remarkGFM]}
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              a: linkBlock,
-            }}
-            className="markdown-body pb-8"
-          >
-            {props.content}
-          </ReactMarkdown>
-          <Script src="https://platform.twitter.com/widgets.js" />
-          <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
-            <AuthorProfile
-              Author={props.author}
-              AuthorName={props.authorName}
-              IconURL={props.icon}
-              Bio={props.bio}
-              SiteURL={props.site}
-              GitHubID={props.github}
-              TwitterID={props.twitter}
-              Roles={props.roles}
-            />
-          </div>
+          <CustomReactMarkdown>{props.content}</CustomReactMarkdown>
+
+          <AuthorProfile
+            className="mt-8 p-2 sm:p-6 border-dotted border-2"
+            Author={props.author}
+            AuthorName={props.authorName}
+            IconURL={props.icon}
+            Bio={props.bio}
+            SiteURL={props.site}
+            GitHubID={props.github}
+            TwitterID={props.twitter}
+            Roles={props.roles}
+          />
         </div>
       </div>
     </Layout>

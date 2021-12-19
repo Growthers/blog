@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaLink, FaGithub, FaTwitter, FaUserCircle } from "react-icons/fa";
 
 type Props = {
+  className: string;
   Author: string;
   AuthorName: string;
   IconURL: string;
@@ -14,15 +15,24 @@ type Props = {
   Roles: string[];
 };
 
-const AuthorProfile: FC<Props> = (props) => {
-  const { Author: AuthorID, AuthorName, IconURL, Bio, SiteURL, GitHubID, TwitterID, Roles } = props;
+const AuthorProfile: FC<Props> = ({
+  className,
+  Author: AuthorID,
+  AuthorName,
+  IconURL,
+  Bio,
+  SiteURL,
+  GitHubID,
+  TwitterID,
+  Roles,
+}) => {
   const isIconURL = IconURL !== "";
   const isSiteURL = SiteURL !== "";
   const isGitHubID = GitHubID !== "";
   const isTwitterID = TwitterID !== "";
 
   return (
-    <div className="bg-white flex items-start w-full">
+    <div className={`bg-white flex items-start w-full ${className}`}>
       <Link href={`/${AuthorID}/`}>
         <a>
           {isIconURL && <img className="h-12 w-12 sm:h-16 sm:w-16 rounded-full" src={IconURL} alt={AuthorName} />}

@@ -9,8 +9,6 @@ import { MdUpdate } from "react-icons/md";
 import { getPosts } from "utils/api";
 import Layout from "components/Layout";
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>;
-
 export const getStaticProps = () => {
   const posts = getPosts()
     .sort((a, b) => {
@@ -41,7 +39,7 @@ export const getStaticProps = () => {
   };
 };
 
-const Home: NextPage<Props> = ({ posts }) => (
+const Home: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ posts }) => (
   <Layout PageTitle="共同開発鯖 - Blog">
     <div className="flex justify-center my-10 p-4 text-3xl font-bold">記事一覧</div>
     <div className="m-auto flex justify-center items-center sm:justify-around flex-wrap w-11/12">
