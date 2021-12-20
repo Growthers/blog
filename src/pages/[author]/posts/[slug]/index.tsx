@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 
-import { GetOgp, DisplayOgp, isNull } from "utils/ogp";
+import { GetOgp, DisplayOgp } from "utils/ogp";
 import { getPosts, getPost } from "utils/api";
 import { DisplayDate, HasPassed } from "components/Date";
 import Layout from "components/Layout";
@@ -51,10 +51,10 @@ export const getStaticProps: GetStaticProps<ArticleInfo, SlugPath> = async ({ pa
         const ogp = ogpData[ogpIndex];
         line = `${line}\n${DisplayOgp(
           url,
-          isNull(ogp.title),
-          isNull(ogp.description),
+          ogp.title ?? "",
+          ogp.description ?? "",
           ogp.image !== "",
-          isNull(ogp.image),
+          ogp.image ?? "",
         )}\n`;
       }
     });

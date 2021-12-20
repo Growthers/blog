@@ -2,8 +2,6 @@ import axios from "axios";
 import cheerio from "cheerio";
 import { OgpData } from "types/ogpData";
 
-export const isNull = (target: string | null): string => (target === null ? "" : target);
-
 export const GetOgp = async (url: string) => {
   const info: OgpData = {
     url,
