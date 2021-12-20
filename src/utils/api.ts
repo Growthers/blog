@@ -3,6 +3,7 @@ import fs from "fs";
 import { join } from "path";
 import matter from "gray-matter";
 import gitlog from "gitlog";
+import { ArticleInfo } from "types/markdownMeta";
 
 const dataPath = "data";
 const articlesPath = "articles";
@@ -13,22 +14,6 @@ const gitoptions = (filepath: string) => ({
   file: filepath,
   fields: ["authorDate"] as const,
 });
-
-export type ArticleInfo = {
-  title: string;
-  slug: string;
-  content: string;
-  author: string;
-  authorName: string;
-  icon: string;
-  bio: string;
-  date: string;
-  lastupdate: string;
-  site: string;
-  github: string;
-  twitter: string;
-  roles: string[];
-};
 
 export const getPost = (author?: string, slug?: string) => {
   if (author === undefined || slug === undefined) return {} as ArticleInfo;
