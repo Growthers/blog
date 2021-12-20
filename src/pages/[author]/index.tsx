@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import "moment/locale/ja";
 
 import { getPosts } from "utils/api";
 import Layout from "components/Layout";

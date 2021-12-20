@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { getPosts } from "utils/api";
-import { AuthorPath } from "../../../types/paths";
+import { AuthorPath } from "types/paths";
 
 export const getStaticPaths: GetStaticPaths<AuthorPath> = async () => {
   const posts = getPosts();

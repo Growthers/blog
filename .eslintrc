@@ -29,6 +29,7 @@
     "react/prop-types": "off",
     "next/no-img-element": "off",
     "react/destructuring-assignment": "off",
+    "no-param-reassign": "off",
     "react/function-component-definition": [
       2,
       {
