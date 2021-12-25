@@ -13,6 +13,7 @@ import { DisplayDate, HasPassed } from "components/Date";
 import Layout from "components/Layout";
 import AuthorProfile from "components/Author";
 import ShareButton from "components/Share";
+import CodeBlock from "components/CodeBlock";
 
 type BeforeProps = ArticleInfo;
 
@@ -217,6 +218,7 @@ const index: NextPage<AfterProps> = (props) => {
             rehypePlugins={[rehypeRaw]}
             components={{
               a: linkBlock,
+              code: CodeBlock,
             }}
             className="markdown-body pb-8"
           >
