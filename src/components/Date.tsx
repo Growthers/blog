@@ -114,7 +114,7 @@ export const HasPassed: FC<YearPassProps> = ({ create, update }) => {
   const nowUNIXTime = Math.floor(new Date().getTime() / 1000);
   const year = Math.floor((nowUNIXTime - UunixTime) / 31536000);
 
-  if (year)
+  if (year > 0)
     return (
       <div className="bg-yellow-300 p-4 mb-2 flex justify-center rounded">
         この記事は最終更新から{year}年以上が経過しています
