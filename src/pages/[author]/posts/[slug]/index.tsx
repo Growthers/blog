@@ -249,7 +249,7 @@ const index: NextPage<AfterProps> = (props) => {
           </div>
         </div>
 
-        <div className="mb-10 h-128 sticky top-1/4 hidden lg:block w-1/4tal">
+        <div className="mb-10 h-[32rem] sticky top-1/4 hidden lg:block w-1/4tal">
           <TableOfContents domArray={domArray} />
         </div>
       </div>
