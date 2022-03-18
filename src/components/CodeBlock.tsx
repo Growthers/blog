@@ -1,6 +1,6 @@
 import { CodeComponent } from "react-markdown/lib/ast-to-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { darcula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 const CodeBlock: CodeComponent = ({ inline, className, children }) => {
   if (inline) {
@@ -12,7 +12,7 @@ const CodeBlock: CodeComponent = ({ inline, className, children }) => {
   if (name === "") {
     return (
       <SyntaxHighlighter
-        style={dracula}
+        style={darcula}
         language={lang}
         // eslint-disable-next-line react/no-children-prop
         children={String(children).replace(/\n$/, "")}
@@ -24,7 +24,7 @@ const CodeBlock: CodeComponent = ({ inline, className, children }) => {
     <>
       <div>{name}</div>
       <SyntaxHighlighter
-        style={dracula}
+        style={darcula}
         language={lang}
         // eslint-disable-next-line react/no-children-prop
         children={String(children).replace(/\n$/, "")}
