@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import Script from "next/script";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -232,7 +231,7 @@ const index: NextPage<AfterProps> = (props) => {
             {props.content}
           </ReactMarkdown>
           <ShareButton url={`https://${DOMAIN}/${props.author}/posts/${props.slug}/`} title={props.title} />
-          <Script src="https://platform.twitter.com/widgets.js" />
+
           <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
             <AuthorProfile
               Author={props.author}
