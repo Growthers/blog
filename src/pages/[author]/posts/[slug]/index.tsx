@@ -212,46 +212,44 @@ const index: NextPage<AfterProps> = (props) => {
         </div>
       </div>
 
-      <div className="flex m-auto justify-center">
-        <div className="px-5 pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
-          <div>
-            <HasPassed create={props.date} update={props.lastupdate} />
-          </div>
-          <div className="bg-white p-2 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
-            <ReactMarkdown
-              remarkPlugins={[remarkGFM]}
-              rehypePlugins={[rehypeRaw]}
-              components={{
-                a: linkBlock,
-                code: CodeBlock,
-                h1: (DomProps) => SetId(DomProps, domArray),
-                h2: (DomProps) => SetId(DomProps, domArray),
-                h3: (DomProps) => SetId(DomProps, domArray),
-              }}
-              className="markdown-body pb-8"
-            >
-              {props.content}
-            </ReactMarkdown>
-            <ShareButton url={`https://${DOMAIN}/${props.author}/posts/${props.slug}/`} title={props.title} />
-            <Script src="https://platform.twitter.com/widgets.js" />
-            <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
-              <AuthorProfile
-                Author={props.author}
-                AuthorName={props.authorName}
-                IconURL={props.icon}
-                Bio={props.bio}
-                SiteURL={props.site}
-                GitHubID={props.github}
-                TwitterID={props.twitter}
-                Roles={props.roles}
-              />
-            </div>
+      <div className="m-auto pb-10 sm:w-11/12 md:w-5/6 lg:w-7/12">
+        <div>
+          <HasPassed create={props.date} update={props.lastupdate} />
+        </div>
+        <div className="bg-white p-2 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
+          <ReactMarkdown
+            remarkPlugins={[remarkGFM]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              a: linkBlock,
+              code: CodeBlock,
+              h1: (DomProps) => SetId(DomProps, domArray),
+              h2: (DomProps) => SetId(DomProps, domArray),
+              h3: (DomProps) => SetId(DomProps, domArray),
+            }}
+            className="markdown-body pb-8"
+          >
+            {props.content}
+          </ReactMarkdown>
+          <ShareButton url={`https://${DOMAIN}/${props.author}/posts/${props.slug}/`} title={props.title} />
+          <Script src="https://platform.twitter.com/widgets.js" />
+          <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
+            <AuthorProfile
+              Author={props.author}
+              AuthorName={props.authorName}
+              IconURL={props.icon}
+              Bio={props.bio}
+              SiteURL={props.site}
+              GitHubID={props.github}
+              TwitterID={props.twitter}
+              Roles={props.roles}
+            />
           </div>
         </div>
+      </div>
 
-        <div className="mb-10 h-[32rem] sticky top-1/4 hidden lg:block w-1/4tal">
-          <TableOfContents domArray={domArray} />
-        </div>
+      <div className="hidden">
+        <TableOfContents domArray={domArray} />
       </div>
     </Layout>
   );
