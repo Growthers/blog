@@ -65,10 +65,10 @@ const Layout: FC<Props> = ({ PageTitle, children, PageDescription = DefaultDescr
       <OgpMetas PageTitle={PageTitle} PageDescription={PageDescription} PageImage={PageImage} />
       <TwitterMetas PageTitle={PageTitle} PageDescription={PageDescription} PageImage={PageImage} />
     </Head>
-    <main className="w-full">
+    <main className="w-full bg-white">
       <div className="min-h-screen w-full">
         <Header />
-        {children}
+        <div className="bg-purple-200/60 min-h-screen">{children}</div>
       </div>
       <Footer />
     </main>
