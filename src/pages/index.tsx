@@ -43,7 +43,7 @@ export const getStaticProps = () => {
 
 const Home: NextPage<Props> = ({ posts }) => (
   <Layout PageTitle="共同開発鯖 - Blog">
-    <div className="flex justify-center my-10 p-4 text-3xl font-bold">記事一覧</div>
+    <div className="flex justify-center py-10 p-4 text-3xl font-bold">記事一覧</div>
     <div className="m-auto flex justify-center items-center sm:justify-around flex-wrap w-11/12">
       {posts.map((post) => (
         <div

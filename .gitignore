@@ -37,3 +37,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 /.idea
+
+.husky/prepare-commit-msg
