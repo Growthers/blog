@@ -12,6 +12,8 @@ const CodeBlock: CodeComponent = ({ inline, className, children }) => {
   if (name === "") {
     return (
       <SyntaxHighlighter
+        PreTag="div"
+        className="code"
         style={darcula}
         language={lang}
         // eslint-disable-next-line react/no-children-prop
@@ -22,8 +24,10 @@ const CodeBlock: CodeComponent = ({ inline, className, children }) => {
 
   return (
     <>
-      <div>{name}</div>
+      <div className="m-2">{name}</div>
       <SyntaxHighlighter
+        PreTag="div"
+        className="code"
         style={darcula}
         language={lang}
         // eslint-disable-next-line react/no-children-prop

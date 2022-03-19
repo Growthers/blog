@@ -1,0 +1,16 @@
+.markdown-body {
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  pre {
+    padding: 0;
+    .code {
+      border-radius: 0.25rem;
+    }
+  }
+}
