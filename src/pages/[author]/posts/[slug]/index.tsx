@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import Script from "next/script";
 import ReactMarkdown from "react-markdown";
 import remarkGFM from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -14,6 +13,8 @@ import Layout from "components/Layout";
 import AuthorProfile from "components/Author";
 import ShareButton from "components/Share";
 import CodeBlock from "components/CodeBlock";
+
+import { SetId, CreateDomArray, TableOfContents } from "components/TableOfContent";
 
 type BeforeProps = ArticleInfo;
 
@@ -175,7 +176,6 @@ const linkBlock = (
   props: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>,
 ): JSX.Element => {
   const { href, children } = props;
-
   if (href === undefined) {
     return <a href={href}>{children}</a>;
   }
@@ -193,12 +193,14 @@ const linkBlock = (
 
 const index: NextPage<AfterProps> = (props) => {
   const isIconURL = props.icon !== "";
+  const domArray = CreateDomArray(props.content);
+
   return (
     <Layout
       PageTitle={props.title}
       PageImage={`https://${OGP_DOMAIN}/${props.title}.png?blog_author=${props.authorName}&background=blog`}
     >
-      <div className="m-6">
+      <div className="p-6">
         <p className="flex justify-center p-4 text-xl lg:text-3xl font-bold break-all">{props.title}</p>
         <div className="flex justify-center items-center">
           {isIconURL && <img className="w-6 h-6 rounded-full mr-2" src={props.icon} alt={props.authorName} />}
@@ -208,24 +210,28 @@ const index: NextPage<AfterProps> = (props) => {
           <DisplayDate create={props.date} update={props.lastupdate} />
         </div>
       </div>
-      <div className="m-auto pb-10 h-full sm:w-11/12 md:w-5/6 lg:w-7/12">
+
+      <div className="m-auto pb-10 sm:w-11/12 md:w-5/6 lg:w-7/12">
         <div>
           <HasPassed create={props.date} update={props.lastupdate} />
         </div>
-        <div className="bg-white p-4 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
+        <div className="bg-white p-2 sm:p-6 md:p-8 pt-6 sm:rounded-lg md:rounded-xl lg:rounded-2xl">
           <ReactMarkdown
             remarkPlugins={[remarkGFM]}
             rehypePlugins={[rehypeRaw]}
             components={{
               a: linkBlock,
               code: CodeBlock,
+              h1: (DomProps) => SetId(DomProps, domArray),
+              h2: (DomProps) => SetId(DomProps, domArray),
+              h3: (DomProps) => SetId(DomProps, domArray),
             }}
             className="markdown-body pb-8"
           >
             {props.content}
           </ReactMarkdown>
           <ShareButton url={`https://${DOMAIN}/${props.author}/posts/${props.slug}/`} title={props.title} />
-          <Script src="https://platform.twitter.com/widgets.js" />
+
           <div className="mt-8 p-2 sm:p-6 border-dotted border-2">
             <AuthorProfile
               Author={props.author}
@@ -239,6 +245,10 @@ const index: NextPage<AfterProps> = (props) => {
             />
           </div>
         </div>
+      </div>
+
+      <div className="hidden">
+        <TableOfContents domArray={domArray} />
       </div>
     </Layout>
   );

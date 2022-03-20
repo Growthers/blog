@@ -24,7 +24,6 @@
     "npm": "please_use_yarn_instead"
   },
   "dependencies": {
-    "@types/glob": "^7.2.0",
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
     "github-markdown-css": "^5.0.0",
@@ -35,15 +34,14 @@
     "next": "12.0.4",
     "raw-loader": "^4.0.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-markdown": "^7.1.0",
     "react-share": "^4.4.0",
     "react-syntax-highlighter": "^15.4.5",
     "rehype-raw": "^6.1.0",
     "remark-gfm": "^3.0.1",
-    "sass": "^1.43.5",
-    "tailwindcss": "^2.2.19"
+    "sass": "^1.43.5"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -57,13 +55,16 @@
     "@swc/jest": "^0.2.5",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
+    "@types/glob": "^7.2.0",
     "@types/jest": "^27.0.3",
     "@types/node": "16.11.8",
     "@types/react": "17.0.35",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-share": "^4.0.0",
     "@types/react-syntax-highlighter": "^13.5.2",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "^10.4.4",
     "babel-jest": "^27.3.1",
     "babel-loader": "^8.2.3",
     "eslint": "7",
@@ -77,8 +78,9 @@
     "husky": "^7.0.4",
     "jest": "^27.3.1",
     "lint-staged": "^12.0.3",
-    "postcss": "^8.4.1",
+    "postcss": "^8.4.12",
     "prettier": "2.4.1",
+    "tailwindcss": "^3.0.23",
     "typescript": "4.5.2"
   }
 }
