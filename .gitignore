@@ -38,4 +38,9 @@ yarn-error.log*
 
 /.idea
 
+# yarn
+.yarn/*
+!.yarn/releases
+
+# git hook
 .husky/prepare-commit-msg
