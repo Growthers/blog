@@ -22,8 +22,7 @@
   },
   "packageManager": "yarn@3.5.0",
   "volta": {
-    "node": "18.15.0",
-    "yarn": "3.5.0"
+    "node": "18.15.0"
   },
   "engines": {
     "npm": "please_use_yarn_instead"
